@@ -29,7 +29,7 @@ echo "Use $OPWRT_ROOTFS_GZ as openwrt rootfs!"
 # Target Image
 TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}.img"
 
-# patchesã€scripts
+# patches¡¢scripts
 ####################################################################
 REGULATORY_DB="${PWD}/files/regulatory.db.tar.gz"
 CPUSTAT_SCRIPT="${PWD}/files/cpustat"
@@ -58,9 +58,6 @@ SYSCTL_CUSTOM_CONF="${PWD}/files/99-custom.conf"
 
 # 20200403 add
 SND_MOD="${PWD}/files/rk3328/snd-rk3328"
-
-# 20200709 add
-COREMARK="${PWD}/files/coremark.sh"
 
 # 20201024 add
 BAL_ETH_IRQ="${PWD}/files/balethirq.pl"
@@ -119,12 +116,12 @@ create_partition "$TGT_DEV" "msdos" "$SKIP_MB" "$BOOT_MB" "ext4" "0" "-1" "btrfs
 make_filesystem "$TGT_DEV" "B" "ext4" "EMMC_BOOT" "R" "btrfs" "EMMC_ROOTFS1"
 mount_fs "${TGT_DEV}p1" "${TGT_BOOT}" "ext4"
 mount_fs "${TGT_DEV}p2" "${TGT_ROOT}" "btrfs" "compress=zstd:${ZSTD_LEVEL}"
-echo "åˆ›å»º /etc å­å· ..."
+echo "´´½¨ /etc ×Ó¾í ..."
 btrfs subvolume create $TGT_ROOT/etc
 extract_rootfs_files
 extract_rockchip_boot_files
 
-echo "ä¿®æ”¹å¼•å¯¼åˆ†åŒºç›¸å…³é…ç½® ... "
+echo "ĞŞ¸ÄÒıµ¼·ÖÇøÏà¹ØÅäÖÃ ... "
 cd $TGT_BOOT
 [ -f $BOOT_CMD ] && cp $BOOT_CMD boot.cmd
 [ -f $BOOT_SCR ] && cp $BOOT_SCR boot.scr
@@ -145,7 +142,7 @@ cat armbianEnv.txt
 echo "==============================================================================="
 echo
 
-echo "ä¿®æ”¹æ ¹æ–‡ä»¶ç³»ç»Ÿç›¸å…³é…ç½® ... "
+echo "ĞŞ¸Ä¸ùÎÄ¼şÏµÍ³Ïà¹ØÅäÖÃ ... "
 cd $TGT_ROOT
 copy_supplement_files
 extract_glibc_programs
@@ -172,6 +169,6 @@ create_snapshot "etc-000"
 write_uboot_to_disk
 clean_work_env
 mv ${TGT_IMG} ${OUTPUT_DIR} && sync
-echo "é•œåƒå·²ç”Ÿæˆ! å­˜æ”¾åœ¨ ${OUTPUT_DIR} ä¸‹é¢!"
+echo "¾µÏñÒÑÉú³É! ´æ·ÅÔÚ ${OUTPUT_DIR} ÏÂÃæ!"
 echo "========================== end $0 ================================"
 echo

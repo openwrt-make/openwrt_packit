@@ -5,7 +5,7 @@ source make.env
 source public_funcs
 init_work_env
 
-# ç›’å­åž‹å·è¯†åˆ«å‚æ•° 
+# ºÐ×ÓÐÍºÅÊ¶±ð²ÎÊý 
 PLATFORM=amlogic
 SOC=s912
 BOARD=zyxq
@@ -24,16 +24,16 @@ K510=$(get_k510_from_boot_tgz "${BOOT_TGZ}" "vmlinuz-${KERNEL_VERSION}")
 export K510
 ###########################################################################
 
-# Openwrt root æºæ–‡ä»¶
+# Openwrt root Ô´ÎÄ¼þ
 OP_ROOT_TGZ="openwrt-armvirt-64-default-rootfs.tar.gz"
 OPWRT_ROOTFS_GZ="${PWD}/${OP_ROOT_TGZ}"
 check_file ${OPWRT_ROOTFS_GZ}
 echo "Use $OPWRT_ROOTFS_GZ as openwrt rootfs!"
 
-# ç›®æ ‡é•œåƒæ–‡ä»¶
+# Ä¿±ê¾µÏñÎÄ¼þ
 TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}.img"
 
-# è¡¥ä¸å’Œè„šæœ¬
+# ²¹¶¡ºÍ½Å±¾
 ###########################################################################
 REGULATORY_DB="${PWD}/files/regulatory.db.tar.gz"
 KMOD="${PWD}/files/kmod"
@@ -54,9 +54,6 @@ BANNER="${PWD}/files/banner"
 FMW_HOME="${PWD}/files/firmware"
 SMB4_PATCH="${PWD}/files/smb4.11_enable_smb1.patch"
 SYSCTL_CUSTOM_CONF="${PWD}/files/99-custom.conf"
-
-# 20200709 add
-COREMARK="${PWD}/files/coremark.sh"
 
 # 20200930 add
 SND_MOD="${PWD}/files/s912/snd-meson-gx"
@@ -139,25 +136,25 @@ create_partition "$TGT_DEV" "msdos" "$SKIP_MB" "$BOOT_MB" "fat32" "0" "-1" "btrf
 make_filesystem "$TGT_DEV" "B" "fat32" "BOOT" "R" "btrfs" "ROOTFS"
 mount_fs "${TGT_DEV}p1" "${TGT_BOOT}" "vfat"
 mount_fs "${TGT_DEV}p2" "${TGT_ROOT}" "btrfs" "compress=zstd:${ZSTD_LEVEL}"
-echo "åˆ›å»º /etc å­å· ..."
+echo "´´½¨ /etc ×Ó¾í ..."
 btrfs subvolume create $TGT_ROOT/etc
 extract_rootfs_files
 extract_amlogic_boot_files
 
-echo "ä¿®æ”¹å¼•å¯¼åˆ†åŒºç›¸å…³é…ç½® ... "
+echo "ÐÞ¸ÄÒýµ¼·ÖÇøÏà¹ØÅäÖÃ ... "
 cd $TGT_BOOT
 rm -f uEnv.ini
 cat > uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
 
-# ç”¨äºŽ ç« é±¼æ˜Ÿçƒ
+# ÓÃÓÚ ÕÂÓãÐÇÇò
 FDT=/dtb/amlogic/meson-gxm-octopus-planet.dtb
 
-# ç”¨äºŽ å‡å†’çš„ç« é±¼æ˜Ÿçƒ
+# ÓÃÓÚ ¼ÙÃ°µÄÕÂÓãÐÇÇò
 #FDT=/dtb/amlogic/meson-gxm-fake-octopus-planet.dtb
 
-# ç”¨äºŽ Tanix TX9 Pro
+# ÓÃÓÚ Tanix TX9 Pro
 #FDT=/dtb/amlogic/meson-gxm-tx9-pro.dtb
 
 APPEND=root=UUID=${ROOTFS_UUID} rootfstype=btrfs rootflags=compress=zstd:${ZSTD_LEVEL} console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
@@ -169,7 +166,7 @@ cat uEnv.txt
 echo "==============================================================================="
 echo
 
-echo "ä¿®æ”¹æ ¹æ–‡ä»¶ç³»ç»Ÿç›¸å…³é…ç½® ... "
+echo "ÐÞ¸Ä¸ùÎÄ¼þÏµÍ³Ïà¹ØÅäÖÃ ... "
 cd $TGT_ROOT
 copy_supplement_files
 extract_glibc_programs
@@ -196,6 +193,6 @@ create_snapshot "etc-000"
 write_uboot_to_disk
 clean_work_env
 mv ${TGT_IMG} ${OUTPUT_DIR} && sync
-echo "é•œåƒå·²ç”Ÿæˆ! å­˜æ”¾åœ¨ ${OUTPUT_DIR} ä¸‹é¢!"
+echo "¾µÏñÒÑÉú³É! ´æ·ÅÔÚ ${OUTPUT_DIR} ÏÂÃæ!"
 echo "========================== end $0 ================================"
 echo

@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# ç”¨æ³•ï¼š
-# æœ¬æœºå¿…é¡»å®‰è£…å¹¶è¿è¡ŒdockeræœåŠ¡
-# æŠŠç¼–è¯‘å¥½çš„ã€€openwrt-armvirt-64-default-rootfs.tar.gz æ”¾åˆ° ./src2/ï¼Œæˆ–./, å†è¿è¡Œæœ¬è„šæœ¬
+# ÓÃ·¨£º
+# ±¾»ú±ØÐë°²×°²¢ÔËÐÐdocker·þÎñ
+# °Ñ±àÒëºÃµÄ¡¡openwrt-armvirt-64-default-rootfs.tar.gz ·Åµ½ ./src2/£¬»ò./, ÔÙÔËÐÐ±¾½Å±¾
 #
-# è„šæœ¬å¯ä»¥ä»£å…¥2ä¸ªå‚æ•°ï¼šã€€          [img_name]              [tag]
-# ä¾‹å¦‚ï¼š./mk_openwrt_dockerimg.sh  myname/openwrt-aarch64  latest
-# å¦‚æžœä¸å¡«å‘½ä»¤è¡Œå‚æ•°çš„è¯ï¼Œé»˜è®¤é•œåƒåç§°æ˜¯ã€€unifreq/openwrt-aarch64:latest
+# ½Å±¾¿ÉÒÔ´úÈë2¸ö²ÎÊý£º¡¡          [img_name]              [tag]
+# ÀýÈç£º./mk_openwrt_dockerimg.sh  myname/openwrt-aarch64  latest
+# Èç¹û²»ÌîÃüÁîÐÐ²ÎÊýµÄ»°£¬Ä¬ÈÏ¾µÏñÃû³ÆÊÇ¡¡unifreq/openwrt-aarch64:latest
 #
-# buildæˆåŠŸåŽï¼Œç”¨ docker imageså¯ä»¥çœ‹åˆ°ç”Ÿæˆçš„é•œåƒ
-# å¹¶ä¸”ä¼šæ‰“åŒ…æˆæœ¬åœ°é•œåƒï¼š ${OUTDIR}/docker-img-openwrt-aarch64-${TAG}.gz (å¯ä»¥ç”¨docker loader å‘½ä»¤å¯¼å…¥)
+# build³É¹¦ºó£¬ÓÃ docker images¿ÉÒÔ¿´µ½Éú³ÉµÄ¾µÏñ
+# ²¢ÇÒ»á´ò°ü³É±¾µØ¾µÏñ£º ${OUTDIR}/docker-img-openwrt-aarch64-${TAG}.gz (¿ÉÒÔÓÃdocker loader ÃüÁîµ¼Èë)
 
 IMG_NAME=unifreq/openwrt-aarch64
 TAG=latest
@@ -62,7 +62,6 @@ cp -f files/docker/rc.local "$TMPDIR/etc/" && \
 cp -f files/99-custom.conf "$TMPDIR/etc/sysctl.d/" && \
 cp -f files/cpustat "$TMPDIR/usr/bin/" && chmod 755 "$TMPDIR/usr/bin/cpustat" && \
 cp -f files/getcpu "$TMPDIR/bin/" && chmod 755 "$TMPDIR/bin/getcpu" && \
-cp -f files/coremark.sh "$TMPDIR/etc/" && chmod 755 "$TMPDIR/etc/coremark.sh"
 cp -f files/kmod "$TMPDIR/sbin/" && \
 	(
             cd $TMPDIR/sbin && \
@@ -87,9 +86,6 @@ if ! cat files/docker/cbi_turboacc_new.patch | (cd "$TMPDIR/" && patch -p1 );the
 fi
 sed -e "s/hw_flow '1'/hw_flow '0'/" -i $TMPDIR/etc/config/turboacc
 sed -e "s/sfe_flow '1'/sfe_flow '0'/" -i $TMPDIR/etc/config/turboacc
-
-rm -f "$TMPDIR/etc/bench.log" && \
-echo "17 3 * * * /etc/coremark.sh" >> "$TMPDIR/etc/crontabs/root"
 
 [ -f ${TMPDIR}/etc/config/qbittorrent ] && sed -e 's/\/opt/\/etc/' -i "${TMPDIR}/etc/config/qbittorrent"
 

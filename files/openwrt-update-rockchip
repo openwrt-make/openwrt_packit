@@ -104,7 +104,7 @@ elif [ $(ls *.zip -l 2>/dev/null | grep "^-" | wc -l) -ge 1 ]; then
     IMG_NAME=$(ls *.img | head -n 1)
 else
     echo -e "Please upload or specify the update openwrt firmware file."
-    echo -e "Upload method: system menu â†’ Amlogic Service â†’ Manually Upload Update"
+    echo -e "Upload method: system menu ¡ú Amlogic Service ¡ú Manually Upload Update"
     echo -e "Specify method: Place the openwrt firmware file in [ /mnt/${EMMC_NAME}${PARTITION_NAME}4/ ]"
     echo -e "The supported file suffixes are: *.img, *.img.xz, *.img.gz, *.7z, *.zip"
     echo -e "After upload the openwrt firmware file, run again."
@@ -453,12 +453,12 @@ if [ $BR_FLAG -eq 1 ]; then
     [ -f ./etc/config/dockerd ] && sed -e "s/option wan_mode '0'/option wan_mode '1'/" -i ./etc/config/dockerd 2>/dev/null
     [ -f ./etc/config/verysync ] && sed -e 's/config setting/config verysync/' -i ./etc/config/verysync
 
-    # è¿˜åŸ fstab
+    # »¹Ô­ fstab
     cp -f .snapshots/etc-000/fstab ./etc/fstab
     cp -f .snapshots/etc-000/config/fstab ./etc/config/fstab
-    # è¿˜åŸ luci
+    # »¹Ô­ luci
     cp -f .snapshots/etc-000/config/luci ./etc/config/luci
-    # è¿˜åŸ/etc/config/rpcd
+    # »¹Ô­/etc/config/rpcd
     cp -f .snapshots/etc-000/config/rpcd ./etc/config/rpcd
 
     sync
@@ -466,18 +466,14 @@ if [ $BR_FLAG -eq 1 ]; then
     echo
 fi
 
-cat >>./etc/crontabs/root <<EOF
-17 3 * * * /etc/coremark.sh
-EOF
-
 sed -e 's/ttyAMA0/ttyS2/' -i ./etc/inittab
 sed -e 's/ttyS0/tty1/' -i ./etc/inittab
 sss=$(date +%s)
 ddd=$((sss / 86400))
 sed -e "s/:0:0:99999:7:::/:${ddd}:0:99999:7:::/" -i ./etc/shadow
-# ä¿®å¤amuleæ¯æ¬¡å‡çº§åé‡å¤æ·»åŠ æ¡ç›®çš„é—®é¢˜
+# ĞŞ¸´amuleÃ¿´ÎÉı¼¶ºóÖØ¸´Ìí¼ÓÌõÄ¿µÄÎÊÌâ
 sed -e "/amule:x:/d" -i ./etc/shadow
-# ä¿®å¤dropbearæ¯æ¬¡å‡çº§åé‡å¤æ·»åŠ sshdæ¡ç›®çš„é—®é¢˜
+# ĞŞ¸´dropbearÃ¿´ÎÉı¼¶ºóÖØ¸´Ìí¼ÓsshdÌõÄ¿µÄÎÊÌâ
 sed -e "/sshd:x:/d" -i ./etc/shadow
 if ! grep "sshd:x:22:sshd" ./etc/group >/dev/null;then
      echo "sshd:x:22:sshd" >> ./etc/group
@@ -536,9 +532,9 @@ chmod 755 ./etc/rc.local*
 echo "create the second etc snapshot -> .snapshots/etc-001"
 btrfs subvolume snapshot -r etc .snapshots/etc-001
 
-# 2021.04.01æ·»åŠ 
-# å¼ºåˆ¶é”å®šfstab,é˜²æ­¢ç”¨æˆ·æ“…è‡ªä¿®æ”¹æŒ‚è½½ç‚¹
-# å¼€å¯äº†å¿«ç…§åŠŸèƒ½ä¹‹åï¼Œä¸å†éœ€è¦é”å®šfstab
+# 2021.04.01Ìí¼Ó
+# Ç¿ÖÆËø¶¨fstab,·ÀÖ¹ÓÃ»§ÉÃ×ÔĞŞ¸Ä¹ÒÔØµã
+# ¿ªÆôÁË¿ìÕÕ¹¦ÄÜÖ®ºó£¬²»ÔÙĞèÒªËø¶¨fstab
 #chattr +ia ./etc/config/fstab
 
 cd ${WORK_DIR}

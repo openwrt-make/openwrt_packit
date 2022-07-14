@@ -29,7 +29,7 @@ echo "Use $OPWRT_ROOTFS_GZ as openwrt rootfs!"
 # Target Image
 TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}.img"
 
-# patchesã€scripts
+# patches¡¢scripts
 ####################################################################
 REGULATORY_DB="${PWD}/files/regulatory.db.tar.gz"
 CPUSTAT_SCRIPT="${PWD}/files/cpustat"
@@ -54,9 +54,6 @@ BANNER="${PWD}/files/banner"
 FMW_HOME="${PWD}/files/firmware"
 SMB4_PATCH="${PWD}/files/smb4.11_enable_smb1.patch"
 SYSCTL_CUSTOM_CONF="${PWD}/files/99-custom.conf"
-
-# 20200709 add
-COREMARK="${PWD}/files/coremark.sh"
 
 # 20201024 add
 BAL_ETH_IRQ="${PWD}/files/balethirq.pl"
@@ -116,12 +113,12 @@ create_partition "$TGT_DEV" "msdos" "$SKIP_MB" "$BOOT_MB" "fat32" "0" "-1" "btrf
 make_filesystem "$TGT_DEV" "B" "fat32" "EMMC_BOOT" "R" "btrfs" "EMMC_ROOTFS1"
 mount_fs "${TGT_DEV}p1" "${TGT_BOOT}" "vfat"
 mount_fs "${TGT_DEV}p2" "${TGT_ROOT}" "btrfs" "compress=zstd:${ZSTD_LEVEL}"
-echo "åˆ›å»º /etc å­å· ..."
+echo "´´½¨ /etc ×Ó¾í ..."
 btrfs subvolume create $TGT_ROOT/etc
 extract_rootfs_files
 extract_allwinner_boot_files
 
-echo "ä¿®æ”¹å¼•å¯¼åˆ†åŒºç›¸å…³é…ç½® ... "
+echo "ÐÞ¸ÄÒýµ¼·ÖÇøÏà¹ØÅäÖÃ ... "
 cd $TGT_BOOT
 [ -f $BOOT_CMD ] && cp -v $BOOT_CMD boot.cmd
 [ -f $BOOT_SCR ] && cp -v $BOOT_SCR boot.scr
@@ -130,9 +127,9 @@ cat > uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
 
-#  æ™®é€šç‰ˆ 1800Mhz
+#  ÆÕÍ¨°æ 1800Mhz
 FDT=/dtb/allwinner/sun50i-h6-vplus-cloud.dtb
-#  è¶…é¢‘ç‰ˆ 2016Mhz
+#  ³¬Æµ°æ 2016Mhz
 #FDT=/dtb/allwinner/sun50i-h6-vplus-cloud-2ghz.dtb
 
 APPEND=root=UUID=${ROOTFS_UUID} rootfstype=btrfs rootflags=compress=zstd:${ZSTD_LEVEL} console=ttyS0,115200n8 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
@@ -143,7 +140,7 @@ cat uEnv.txt
 echo "======================================================================================"
 echo
 
-echo "ä¿®æ”¹æ ¹æ–‡ä»¶ç³»ç»Ÿç›¸å…³é…ç½® ... "
+echo "ÐÞ¸Ä¸ùÎÄ¼þÏµÍ³Ïà¹ØÅäÖÃ ... "
 cd $TGT_ROOT
 copy_supplement_files
 extract_glibc_programs
@@ -170,6 +167,6 @@ create_snapshot "etc-000"
 write_uboot_to_disk
 clean_work_env
 mv $TGT_IMG $OUTPUT_DIR && sync
-echo "é•œåƒå·²ç”Ÿæˆ, å­˜æ”¾åœ¨ ${OUTPUT_DIR} ä¸‹é¢"
+echo "¾µÏñÒÑÉú³É, ´æ·ÅÔÚ ${OUTPUT_DIR} ÏÂÃæ"
 echo "========================== end $0 ================================"
 echo

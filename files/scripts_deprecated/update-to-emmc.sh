@@ -306,18 +306,10 @@ config mount
 		
 EOF
 
-# 2021.04.01æ·»åŠ 
-# å¼ºåˆ¶é”å®šfstab,é˜²æ­¢ç”¨æˆ·æ“…è‡ªä¿®æ”¹æŒ‚è½½ç‚¹
+# 2021.04.01Ìí¼Ó
+# Ç¿ÖÆËø¶¨fstab,·ÀÖ¹ÓÃ»§ÉÃ×ÔÐÞ¸Ä¹ÒÔØµã
 chattr +ia fstab
 
-cd /mnt/${DST_NAME}p2/etc
-rm -f bench.log
-cat >> crontabs/root << EOF
-17 3 * * * /etc/coremark.sh
-EOF
-echo "edit done"
-echo
-	
 cd /mnt/${DST_NAME}p2
 if [ -x ./usr/sbin/balethirq.pl ];then
     if grep "balethirq.pl" "./etc/rc.local";then

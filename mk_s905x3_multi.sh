@@ -5,7 +5,7 @@ source make.env
 source public_funcs
 init_work_env
 
-# ç›’å­åž‹å·è¯†åˆ«å‚æ•° 
+# ºÐ×ÓÐÍºÅÊ¶±ð²ÎÊý 
 PLATFORM=amlogic
 SOC=s905x3
 BOARD=multi
@@ -24,16 +24,16 @@ K510=$(get_k510_from_boot_tgz "${BOOT_TGZ}" "vmlinuz-${KERNEL_VERSION}")
 export K510
 ###########################################################################
 
-# Openwrt root æºæ–‡ä»¶
+# Openwrt root Ô´ÎÄ¼þ
 OP_ROOT_TGZ="openwrt-armvirt-64-default-rootfs.tar.gz"
 OPWRT_ROOTFS_GZ="${PWD}/${OP_ROOT_TGZ}"
 check_file ${OPWRT_ROOTFS_GZ}
 echo "Use $OPWRT_ROOTFS_GZ as openwrt rootfs!"
 
-# ç›®æ ‡é•œåƒæ–‡ä»¶
+# Ä¿±ê¾µÏñÎÄ¼þ
 TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}.img"
 
-# è¡¥ä¸å’Œè„šæœ¬
+# ²¹¶¡ºÍ½Å±¾
 ###########################################################################
 REGULATORY_DB="${PWD}/files/regulatory.db.tar.gz"
 KMOD="${PWD}/files/kmod"
@@ -54,9 +54,6 @@ BANNER="${PWD}/files/banner"
 FMW_HOME="${PWD}/files/firmware"
 SMB4_PATCH="${PWD}/files/smb4.11_enable_smb1.patch"
 SYSCTL_CUSTOM_CONF="${PWD}/files/99-custom.conf"
-
-# 20200709 add
-COREMARK="${PWD}/files/coremark.sh"
 
 # 20200930 add
 SND_MOD="${PWD}/files/s905x3/snd-meson-g12"
@@ -137,72 +134,72 @@ create_partition "$TGT_DEV" "msdos" "$SKIP_MB" "$BOOT_MB" "fat32" "0" "-1" "btrf
 make_filesystem "$TGT_DEV" "B" "fat32" "BOOT" "R" "btrfs" "ROOTFS"
 mount_fs "${TGT_DEV}p1" "${TGT_BOOT}" "vfat"
 mount_fs "${TGT_DEV}p2" "${TGT_ROOT}" "btrfs" "compress=zstd:${ZSTD_LEVEL}"
-echo "åˆ›å»º /etc å­å· ..."
+echo "´´½¨ /etc ×Ó¾í ..."
 btrfs subvolume create $TGT_ROOT/etc
 extract_rootfs_files
 extract_amlogic_boot_files
 
-echo "ä¿®æ”¹å¼•å¯¼åˆ†åŒºç›¸å…³é…ç½® ... "
+echo "ÐÞ¸ÄÒýµ¼·ÖÇøÏà¹ØÅäÖÃ ... "
 cd $TGT_BOOT
 rm -f uEnv.ini
 cat > uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
 
-# ä¸‹åˆ— dtbï¼Œç”¨åˆ°å“ªä¸ªå°±æŠŠå“ªä¸ªçš„#åˆ é™¤ï¼Œå…¶å®ƒçš„åˆ™åŠ ä¸Š # åœ¨è¡Œé¦–
+# ÏÂÁÐ dtb£¬ÓÃµ½ÄÄ¸ö¾Í°ÑÄÄ¸öµÄ#É¾³ý£¬ÆäËüµÄÔò¼ÓÉÏ # ÔÚÐÐÊ×
 
-# ç”¨äºŽ X96 Max+ (S905X3 ç½‘å¡å·¥ä½œäºŽ 100m)
+# ÓÃÓÚ X96 Max+ (S905X3 Íø¿¨¹¤×÷ÓÚ 100m)
 FDT=/dtb/amlogic/meson-sm1-x96-max-plus-100m.dtb
 
-# ç”¨äºŽ X96 Max+ (S905X3 ç½‘å¡å·¥ä½œäºŽ 1000M)
+# ÓÃÓÚ X96 Max+ (S905X3 Íø¿¨¹¤×÷ÓÚ 1000M)
 #FDT=/dtb/amlogic/meson-sm1-x96-max-plus.dtb
 
-# ç”¨äºŽ X96 Max+ (S905X3 ç½‘å¡å·¥ä½œäºŽ 1000M) (è¶…é¢‘è‡³2208Mhz)
+# ÓÃÓÚ X96 Max+ (S905X3 Íø¿¨¹¤×÷ÓÚ 1000M) (³¬ÆµÖÁ2208Mhz)
 #FDT=/dtb/amlogic/meson-sm1-x96-max-plus-oc.dtb
 
-# ç”¨äºŽ X96 Max+ with IP1001M (S905X3 ç½‘å¡å·¥ä½œäºŽ 1000M) (è¶…é¢‘è‡³2208Mhz)
+# ÓÃÓÚ X96 Max+ with IP1001M (S905X3 Íø¿¨¹¤×÷ÓÚ 1000M) (³¬ÆµÖÁ2208Mhz)
 #FDT=/dtb/amlogic/meson-sm1-x96-max-plus-ip1001m.dtb
 
-# ç”¨äºŽ HK1 BoX (S905X3 ç½‘å¡å·¥ä½œäºŽ 1000M)
+# ÓÃÓÚ HK1 BoX (S905X3 Íø¿¨¹¤×÷ÓÚ 1000M)
 #FDT=/dtb/amlogic/meson-sm1-hk1box-vontar-x3.dtb
 
-# ç”¨äºŽ HK1 BoX (S905X3 ç½‘å¡å·¥ä½œäºŽ 1000M) (è¶…é¢‘è‡³2184Mhz)
+# ÓÃÓÚ HK1 BoX (S905X3 Íø¿¨¹¤×÷ÓÚ 1000M) (³¬ÆµÖÁ2184Mhz)
 #FDT=/dtb/amlogic/meson-sm1-hk1box-vontar-x3-oc.dtb
 
-# ç”¨äºŽ H96 Max X3 (S905X3 ç½‘å¡å·¥ä½œäºŽ 1000M)
+# ÓÃÓÚ H96 Max X3 (S905X3 Íø¿¨¹¤×÷ÓÚ 1000M)
 #FDT=/dtb/amlogic/meson-sm1-h96-max-x3.dtb
 
-# ç”¨äºŽ H96 Max X3 (S905X3 ç½‘å¡å·¥ä½œäºŽ 1000M) (è¶…é¢‘è‡³2208Mhz)
+# ÓÃÓÚ H96 Max X3 (S905X3 Íø¿¨¹¤×÷ÓÚ 1000M) (³¬ÆµÖÁ2208Mhz)
 #FDT=/dtb/amlogic/meson-sm1-h96-max-x3-oc.dtb
 
-# ç”¨äºŽ Ugoos X3 Cube/Pro/Pro (ç½‘å¡å·¥ä½œäºŽ1000M)
+# ÓÃÓÚ Ugoos X3 Cube/Pro/Pro (Íø¿¨¹¤×÷ÓÚ1000M)
 #FDT=/dtb/amlogic/meson-sm1-ugoos-x3.dtb
 
-# ç”¨äºŽ Ugoos X3 Cube/Pro/Pro (ç½‘å¡å·¥ä½œäºŽ1000M) (è¶…é¢‘è‡³2208Mhz)
+# ÓÃÓÚ Ugoos X3 Cube/Pro/Pro (Íø¿¨¹¤×÷ÓÚ1000M) (³¬ÆµÖÁ2208Mhz)
 #FDT=/dtb/amlogic/meson-sm1-ugoos-x3-oc.dtb
 
-# ç”¨äºŽ X96 air åƒå…†ç‰ˆ
+# ÓÃÓÚ X96 air Ç§Õ×°æ
 #FDT=/dtb/amlogic/meson-sm1-x96-air-1000.dtb
 
-# ç”¨äºŽ X96 air ç™¾å…†ç‰ˆ
+# ÓÃÓÚ X96 air °ÙÕ×°æ
 #FDT=/dtb/amlogic/meson-sm1-x96-air-100.dtb
 
-# ç”¨äºŽ A95XF3 air åƒå…†ç‰ˆ
+# ÓÃÓÚ A95XF3 air Ç§Õ×°æ
 #FDT=/dtb/amlogic/meson-sm1-a95xf3-air-1000.dtb
 
-# ç”¨äºŽ A95XF3 air ç™¾å…†ç‰ˆ
+# ÓÃÓÚ A95XF3 air °ÙÕ×°æ
 #FDT=/dtb/amlogic/meson-sm1-a95xf3-air-100.dtb
 
-# ç”¨äºŽ Tanix TX3 ç™¾å…†ç‰ˆ
+# ÓÃÓÚ Tanix TX3 °ÙÕ×°æ
 #FDT=/dtb/amlogic/meson-sm1-tx3-bz.dtb
 
-# ç”¨äºŽ Tanix TX3 ç™¾å…†ç‰ˆ (è¶…é¢‘è‡³2208Mhz)
+# ÓÃÓÚ Tanix TX3 °ÙÕ×°æ (³¬ÆµÖÁ2208Mhz)
 #FDT=/dtb/amlogic/meson-sm1-tx3-bz-oc.dtb
 
-# ç”¨äºŽ Tanix TX3 åƒå…†ç‰ˆ
+# ÓÃÓÚ Tanix TX3 Ç§Õ×°æ
 #FDT=/dtb/amlogic/meson-sm1-tx3-qz.dtb
 
-# ç”¨äºŽ Tanix TX3 åƒå…†ç‰ˆ (è¶…é¢‘è‡³2208Mhz)
+# ÓÃÓÚ Tanix TX3 Ç§Õ×°æ (³¬ÆµÖÁ2208Mhz)
 #FDT=/dtb/amlogic/meson-sm1-tx3-qz-oc.dtb
 
 APPEND=root=UUID=${ROOTFS_UUID} rootfstype=btrfs rootflags=compress=zstd:${ZSTD_LEVEL} console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
@@ -214,7 +211,7 @@ cat uEnv.txt
 echo "==============================================================================="
 echo
 
-echo "ä¿®æ”¹æ ¹æ–‡ä»¶ç³»ç»Ÿç›¸å…³é…ç½® ... "
+echo "ÐÞ¸Ä¸ùÎÄ¼þÏµÍ³Ïà¹ØÅäÖÃ ... "
 cd $TGT_ROOT
 copy_supplement_files 
 extract_glibc_programs
@@ -241,6 +238,6 @@ create_snapshot "etc-000"
 write_uboot_to_disk
 clean_work_env
 mv ${TGT_IMG} ${OUTPUT_DIR} && sync
-echo "é•œåƒå·²ç”Ÿæˆ! å­˜æ”¾åœ¨ ${OUTPUT_DIR} ä¸‹é¢!"
+echo "¾µÏñÒÑÉú³É! ´æ·ÅÔÚ ${OUTPUT_DIR} ÏÂÃæ!"
 echo "========================== end $0 ================================"
 echo

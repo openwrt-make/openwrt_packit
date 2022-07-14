@@ -5,7 +5,7 @@ if [ ! -d ${WORK_DIR} ];then
 	mkdir -p ${WORK_DIR}
 fi
 
-# æºé•œåƒæ–‡ä»¶
+# Ô´¾µÏñÎÄ¼þ
 ##########################################################################
 OPENWRT_VER="R21.2.1"
 #KERNEL_VERSION="5.4.93-flippy-52+o"
@@ -46,14 +46,14 @@ echo "Use $OPWRT_ROOTFS_GZ as openwrt rootfs!"
 # MODULES_TGZ="/opt/kernel/modules-${KERNEL_VERSION}.tar.gz"
 ###########################################################################
 
-# ç›®æ ‡é•œåƒæ–‡ä»¶
+# Ä¿±ê¾µÏñÎÄ¼þ
 TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}.img"
 
-# å¯é€‰å‚æ•°ï¼šæ˜¯å¦æ›¿æ¢n1çš„dtbæ–‡ä»¶ y:æ›¿æ¢ n:ä¸æ›¿æ¢
+# ¿ÉÑ¡²ÎÊý£ºÊÇ·ñÌæ»»n1µÄdtbÎÄ¼þ y:Ìæ»» n:²»Ìæ»»
 REPLACE_DTB="n"
 DTB_FILE="${PWD}/files/meson-gxl-s905d-phicomm-n1.dtb"
 
-# è¡¥ä¸å’Œè„šæœ¬
+# ²¹¶¡ºÍ½Å±¾
 ###########################################################################
 REGULATORY_DB="${PWD}/files/regulatory.db.tar.gz"
 KMOD="${PWD}/files/kmod"
@@ -81,9 +81,6 @@ SYSCTL_CUSTOM_CONF="${PWD}/files/99-custom.conf"
 # 20200404 add
 SND_MOD="${PWD}/files/snd-meson-gx"
 
-# 20200709 add
-COREMARK="${PWD}/files/coremark.sh"
-
 # 20200930 add
 INST_SCRIPT_S905X3="${PWD}/files/inst-s905x3-to-emmc.sh"
 UPDATE_SCRIPT_S905X3="${PWD}/files/update-s905x3-to-emmc.sh"
@@ -100,54 +97,54 @@ SSL_CNF_PATCH="${PWD}/files/openssl_engine.patch"
 BAL_CONFIG="${PWD}/files/s905x/balance_irq"
 ###########################################################################
 
-# æ£€æŸ¥çŽ¯å¢ƒ
+# ¼ì²é»·¾³
 if [ $(id -u) -ne 0 ];then
-	echo "è¿™ä¸ªè„šæœ¬éœ€è¦ç”¨rootç”¨æˆ·æ¥æ‰§è¡Œï¼Œä½ å¥½è±¡ä¸æ˜¯rootå§ï¼Ÿ"
+	echo "Õâ¸ö½Å±¾ÐèÒªÓÃrootÓÃ»§À´Ö´ÐÐ£¬ÄãºÃÏó²»ÊÇroot°É£¿"
 	exit 1
 fi
 
 if [ ! -f "$LNX_IMG" ];then
-	echo "Armbiané•œåƒ: ${LNX_IMG} ä¸å­˜åœ¨, è¯·æ£€æŸ¥!"
+	echo "Armbian¾µÏñ: ${LNX_IMG} ²»´æÔÚ, Çë¼ì²é!"
 	exit 1
 fi
 
 if [ ! -f "$OPWRT_ROOTFS_GZ" ];then
-	echo "Armbiané•œåƒ: ${OPWRT_ROOTFS_GZ} ä¸å­˜åœ¨, è¯·æ£€æŸ¥!"
+	echo "Armbian¾µÏñ: ${OPWRT_ROOTFS_GZ} ²»´æÔÚ, Çë¼ì²é!"
 	exit 1
 fi
 
 if mkfs.btrfs -V >/dev/null;then
 	echo "check mkfs.btrfs ok"
 else
-	echo "mkfs.btrfs ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… btrfsprogs"
+	echo "mkfs.btrfs ³ÌÐò²»´æÔÚ£¬Çë°²×° btrfsprogs"
 	exit 1
 fi
 
 if mkfs.vfat --help 1>/dev/nul 2>&1;then
 	echo "check mkfs.vfat ok"
 else
-	echo "mkfs.vfat ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… dosfstools"
+	echo "mkfs.vfat ³ÌÐò²»´æÔÚ£¬Çë°²×° dosfstools"
 	exit 1
 fi
 
 if uuidgen>/dev/null;then
 	echo "check uuidgen ok"
 else
-	echo "uuidgen ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… uuid-runtime"
+	echo "uuidgen ³ÌÐò²»´æÔÚ£¬Çë°²×° uuid-runtime"
 	exit 1
 fi
 
 if losetup -V >/dev/null;then
 	echo "check losetup ok"
 else
-	echo "losetup ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… mount"
+	echo "losetup ³ÌÐò²»´æÔÚ£¬Çë°²×° mount"
 	exit 1
 fi
 
 if lsblk --version >/dev/null 2>&1;then
 	echo "check lsblk ok"
 else
-	echo "lsblk ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… util-linux"
+	echo "lsblk ³ÌÐò²»´æÔÚ£¬Çë°²×° util-linux"
 	exit 1
 fi
 
@@ -165,7 +162,7 @@ LINUX_ROOT=armbian_root
 mkdir $LINUX_BOOT $LINUX_ROOT
 
 # mount & tar xf
-echo "æŒ‚è½½ Armbian é•œåƒ ... "
+echo "¹ÒÔØ Armbian ¾µÏñ ... "
 losetup -D
 losetup -f -P $LNX_IMG
 BLK_DEV=$(losetup | grep "$LNX_IMG" | head -n 1 | gawk '{print $1}')
@@ -173,7 +170,7 @@ mount -o ro ${BLK_DEV}p1 $LINUX_BOOT
 mount -o ro ${BLK_DEV}p2 $LINUX_ROOT
 
 # mk tgt_img
-echo "åˆ›å»ºç©ºç™½çš„ç›®æ ‡é•œåƒæ–‡ä»¶ ..."
+echo "´´½¨¿Õ°×µÄÄ¿±ê¾µÏñÎÄ¼þ ..."
 SKIP_MB=4
 BOOT_MB=128
 ROOTFS_MB=512
@@ -184,7 +181,7 @@ dd if=/dev/zero of=$TGT_IMG bs=1M count=$SIZE
 losetup -f -P $TGT_IMG
 TGT_DEV=$(losetup | grep "$TGT_IMG" | gawk '{print $1}')
 
-echo "åˆ›å»ºç£ç›˜åˆ†åŒºå’Œæ–‡ä»¶ç³»ç»Ÿ ..."
+echo "´´½¨´ÅÅÌ·ÖÇøºÍÎÄ¼þÏµÍ³ ..."
 parted -s $TGT_DEV mklabel msdos 2>/dev/null
 BEGIN=$((SKIP_MB * 1024 * 1024))
 END=$(( BOOT_MB * 1024 * 1024 + BEGIN -1))
@@ -198,7 +195,7 @@ ROOTFS_UUID=$(uuidgen)
 echo "ROOTFS_UUID = $ROOTFS_UUID"
 mkfs.btrfs -U ${ROOTFS_UUID} -L ROOTFS -m single ${TGT_DEV}p2
 
-echo "æŒ‚è½½ç›®æ ‡è®¾å¤‡ ..."
+echo "¹ÒÔØÄ¿±êÉè±¸ ..."
 TGT_BOOT=${TEMP_DIR}/tgt_boot
 TGT_ROOT=${TEMP_DIR}/tgt_root
 mkdir $TGT_BOOT $TGT_ROOT
@@ -206,7 +203,7 @@ mount -t vfat ${TGT_DEV}p1 $TGT_BOOT
 mount -t btrfs -o compress=zstd ${TGT_DEV}p2 $TGT_ROOT
 
 # extract boot
-echo "boot æ–‡ä»¶è§£åŒ… ... "
+echo "boot ÎÄ¼þ½â°ü ... "
 cd $TEMP_DIR/$LINUX_BOOT 
 #if [ -f "${BOOT_TGZ}" ];then
 #	( cd $TGT_BOOT; tar xvzf "${BOOT_TGZ}" )
@@ -214,7 +211,7 @@ cd $TEMP_DIR/$LINUX_BOOT
 	tar cf - . | (cd $TGT_BOOT; tar xf - )
 #fi
 
-echo "openwrt æ ¹æ–‡ä»¶ç³»ç»Ÿè§£åŒ… ... "
+echo "openwrt ¸ùÎÄ¼þÏµÍ³½â°ü ... "
 (
   cd $TGT_ROOT && \
 	  tar xzf $OPWRT_ROOTFS_GZ && \
@@ -222,11 +219,11 @@ echo "openwrt æ ¹æ–‡ä»¶ç³»ç»Ÿè§£åŒ… ... "
 	  mkdir -p .reserved boot rom proc sys run
 )
 
-echo "Armbian æ ¹æ–‡ä»¶ç³»ç»Ÿè§£åŒ… ... "
+echo "Armbian ¸ùÎÄ¼þÏµÍ³½â°ü ... "
 cd $TEMP_DIR/$LINUX_ROOT && \
 	tar cf - ./etc/armbian* ./etc/default/armbian* ./etc/default/cpufreq* ./lib/init ./lib/lsb ./lib/firmware ./usr/lib/armbian | (cd ${TGT_ROOT}; tar xf -)
 
-echo "å†…æ ¸æ¨¡å—è§£åŒ… ... "
+echo "ÄÚºËÄ£¿é½â°ü ... "
 cd $TEMP_DIR/$LINUX_ROOT
 #if [ -f "${MODULES_TGZ}" ];then
 #	(cd ${TGT_ROOT}/lib/modules; tar xvzf "${MODULES_TGZ}")
@@ -246,7 +243,7 @@ while :;do
 	sleep 1
 done
 
-echo "ä¿®æ”¹å¼•å¯¼åˆ†åŒºç›¸å…³é…ç½® ... "
+echo "ÐÞ¸ÄÒýµ¼·ÖÇøÏà¹ØÅäÖÃ ... "
 # modify boot
 cd $TGT_BOOT
 rm -f uEnv.ini
@@ -254,31 +251,31 @@ cat > uEnv.txt <<EOF
 LINUX=/zImage
 INITRD=/uInitrd
 
-# ä¸‹åˆ— dtbï¼Œç”¨åˆ°å“ªä¸ªå°±æŠŠå“ªä¸ªçš„#åˆ é™¤ï¼Œå…¶å®ƒçš„åˆ™åŠ ä¸Š # åœ¨è¡Œé¦–
-# ç”¨äºŽæ–è®¯ Phicomm N1 , å¯å†™å…¥EMMC
+# ÏÂÁÐ dtb£¬ÓÃµ½ÄÄ¸ö¾Í°ÑÄÄ¸öµÄ#É¾³ý£¬ÆäËüµÄÔò¼ÓÉÏ # ÔÚÐÐÊ×
+# ÓÃÓÚì³Ñ¶ Phicomm N1 , ¿ÉÐ´ÈëEMMC
 FDT=/dtb/amlogic/meson-gxl-s905d-phicomm-n1.dtb
-# ç”¨äºŽæ–è®¯ Phicomm N1 (thresh), å¯å†™å…¥EMMC
+# ÓÃÓÚì³Ñ¶ Phicomm N1 (thresh), ¿ÉÐ´ÈëEMMC
 #FDT=/dtb/amlogic/meson-gxl-s905d-phicomm-n1-thresh.dtb
 
-# ç”¨äºŽç« é±¼æ˜Ÿçƒ (S912), å¯å†™å…¥EMMC
+# ÓÃÓÚÕÂÓãÐÇÇò (S912), ¿ÉÐ´ÈëEMMC
 #FDT=/dtb/amlogic/meson-gxm-octopus-planet.dtb
 
 APPEND=root=UUID=${ROOTFS_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 
-# æ›¿æ¢dtbæ–‡ä»¶
+# Ìæ»»dtbÎÄ¼þ
 [ "$REPLACE_DTB" == "y" ] && [ -f "$DTB_FILE" ] && cp "$DTB_FILE" ./dtb/amlogic/
 
 echo "uEnv.txt --->"
 cat uEnv.txt
 
-# 5.10ä»¥åŽçš„å†…æ ¸ï¼Œéœ€è¦å¢žåŠ u-booté‡è½½
+# 5.10ÒÔºóµÄÄÚºË£¬ÐèÒªÔö¼Óu-bootÖØÔØ
 if [ -f u-boot-p212.bin ];then
 	cp -fv u-boot-p212.bin u-boot.ext
 	cp -fv u-boot-p212.bin u-boot.emmc
 fi
 
-echo "ä¿®æ”¹æ ¹æ–‡ä»¶ç³»ç»Ÿç›¸å…³é…ç½® ... "
+echo "ÐÞ¸Ä¸ùÎÄ¼þÏµÍ³Ïà¹ØÅäÖÃ ... "
 # modify root
 cd $TGT_ROOT
 
@@ -289,7 +286,6 @@ cd $TGT_ROOT
 [ -f $MAC_SCRIPT2 ] && cp $MAC_SCRIPT2 usr/bin/
 [ -f $MAC_SCRIPT3 ] && cp $MAC_SCRIPT3 usr/bin/
 [ -f $DAEMON_JSON ] && mkdir -p "etc/docker" && cp $DAEMON_JSON "etc/docker/daemon.json"
-[ -f $COREMARK ] && [ -f "etc/coremark.sh" ] && cp -f $COREMARK "etc/coremark.sh" && chmod 755 "etc/coremark.sh"
 if [ -x usr/bin/perl ];then
 	[ -f $CPUSTAT_SCRIPT ] && cp $CPUSTAT_SCRIPT usr/bin/
 	[ -f $GETCPU_SCRIPT ] && cp $GETCPU_SCRIPT bin/
@@ -466,11 +462,6 @@ source $TGT_ROOT/usr/lib/armbian/armbian-common
 get_random_mac
 sed -e "s/macaddr=b8:27:eb:74:f2:6c/macaddr=${MACADDR}/" "brcmfmac43455-sdio.txt" > "brcmfmac43455-sdio.phicomm,n1.txt"
 
-rm -f ${TGT_ROOT}/etc/bench.log
-cat >> ${TGT_ROOT}/etc/crontabs/root << EOF
-17 3 * * * /etc/coremark.sh
-EOF
-
 [ -f $CPUSTAT_PATCH ] && \
 cd $TGT_ROOT/usr/lib/lua/luci/view/admin_status && \
 patch -p0 < ${CPUSTAT_PATCH}
@@ -482,5 +473,5 @@ umount -f $LINUX_BOOT $LINUX_ROOT $TGT_BOOT $TGT_ROOT
 ( losetup -D && cd $WORK_DIR && rm -rf $TEMP_DIR && losetup -D)
 sync
 echo
-echo "æˆ‘ä–ˆ N1 ä¸€åƒéï¼ŒN1 å¾…æˆ‘å¦‚åˆæ‹ï¼"
-echo "é•œåƒæ‰“åŒ…å·²å®Œæˆï¼Œå†è§!"
+echo "ÎÒ? N1 Ò»Ç§±é£¬N1 ´ýÎÒÈç³õÁµ£¡"
+echo "¾µÏñ´ò°üÒÑÍê³É£¬ÔÙ¼û!"

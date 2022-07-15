@@ -5,7 +5,7 @@ export ZSTD_LEVEL=6
 
 get_random_mac ()
 {
-    # MACåœ°å€ç¬¬ä¸€æ®µå¯åœ¨ 02 06 0A 0E ä¸­ä»»é€‰ä¸€ä¸ª
+    # MACµØÖ·µÚÒ»¶Î¿ÉÔÚ 02 06 0A 0E ÖĞÈÎÑ¡Ò»¸ö
     if [ "$SHELL" == "/bin/bash" ];then
         #MACADDR=$(printf "%02X:%02X:%02X:%02X:%02X:%02X\n" $[RANDOM%255] $[RANDOM%255] $[RANDOM%255] $[RANDOM%255] $[RANDOM%255] $[RANDOM%255])
         MACADDR=$(printf "06:%02X:%02X:%02X:%02X:%02X\n" $[RANDOM%255] $[RANDOM%255] $[RANDOM%255] $[RANDOM%255] $[RANDOM%255])
@@ -24,7 +24,7 @@ get_random_mac ()
 
 function check_file() {
     if [ ! -f "$1" ];then
-        echo "æ–‡ä»¶: [$1] ä¸å­˜åœ¨!"
+        echo "ÎÄ¼ş: [$1] ²»´æÔÚ!"
         if [ "$2" == "" ];then
             exit 1
         else
@@ -35,7 +35,7 @@ function check_file() {
 
 function check_dir() {
     if [ ! -d "$1" ];then
-        echo "ç›®å½•: [$1] ä¸å­˜åœ¨!"
+        echo "Ä¿Â¼: [$1] ²»´æÔÚ!"
         if [ "$2" == "" ];then
             exit 1
         else
@@ -46,7 +46,7 @@ function check_dir() {
 
 function check_block_dev() {
     if [ ! -b "$1" ];then
-        echo "å—è®¾å¤‡: [$1] ä¸å­˜åœ¨!"
+        echo "¿éÉè±¸: [$1] ²»´æÔÚ!"
         if [ "$2" == "" ];then
             exit 1
         else
@@ -55,10 +55,10 @@ function check_block_dev() {
     fi
 }
 
-# æ­¤å‡½æ•°åŸæœ‰çš„ç”¨é€”æ˜¯æ£€æŸ¥å†…æ ¸ç‰ˆæœ¬æ˜¯å¦ >= 5.10, ç°æ”¹ä¸ºæ£€æŸ¥å†…æ ¸çš„ text_offset æ˜¯å¦ä¸º 0x01080000
+# ´Ëº¯ÊıÔ­ÓĞµÄÓÃÍ¾ÊÇ¼ì²éÄÚºË°æ±¾ÊÇ·ñ >= 5.10, ÏÖ¸ÄÎª¼ì²éÄÚºËµÄ text_offset ÊÇ·ñÎª 0x01080000
 # text offset: 
-#   0x01080000  é€‚ç”¨æ™¶æ™¨ç›’å­å‚å•† bootloader ä»¥åŠ ä¸»çº¿ bootloader, å·²è¿‡æ—¶
-#   0x00000000  é€‚ç”¨ä¸»çº¿ bootloader, ä½†ä¸é€‚ç”¨æ™¶æ™¨å‚å•† bootloader
+#   0x01080000  ÊÊÓÃ¾§³¿ºĞ×Ó³§ÉÌ bootloader ÒÔ¼° Ö÷Ïß bootloader, ÒÑ¹ıÊ±
+#   0x00000000  ÊÊÓÃÖ÷Ïß bootloader, µ«²»ÊÊÓÃ¾§³¿³§ÉÌ bootloader
 function get_k510_from_vmlinuz() {
     local vmlinuz=$1
     local temp_script=$(mktemp) 
@@ -96,42 +96,42 @@ function get_k510_from_boot_tgz() {
 
 function check_depends() {
     if [ $(id -u) -ne 0 ];then
-        echo "è¿™ä¸ªè„šæœ¬éœ€è¦ç”¨rootç”¨æˆ·æ¥æ‰§è¡Œï¼Œä½ å¥½è±¡ä¸æ˜¯rootå§ï¼Ÿ"
+        echo "Õâ¸ö½Å±¾ĞèÒªÓÃrootÓÃ»§À´Ö´ĞĞ£¬ÄãºÃÏó²»ÊÇroot°É£¿"
         exit 1
     fi
 
     if mkfs.btrfs -V >/dev/null;then
         echo "check mkfs.btrfs ok"
     else
-        echo "mkfs.btrfs ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… btrfs-progs"
+        echo "mkfs.btrfs ³ÌĞò²»´æÔÚ£¬Çë°²×° btrfs-progs"
         exit 1
     fi
 
     if mkfs.vfat --help 1>/dev/nul 2>&1;then
         echo "check mkfs.vfat ok"
     else
-        echo "mkfs.vfat ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… dosfstools"
+        echo "mkfs.vfat ³ÌĞò²»´æÔÚ£¬Çë°²×° dosfstools"
         exit 1
     fi
 
     if gawk --version >/dev/null;then
         echo "check gawk ok"
     else
-        echo "gawk ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… gawk"
+        echo "gawk ³ÌĞò²»´æÔÚ£¬Çë°²×° gawk"
         exit 1
     fi
 
     if uuidgen>/dev/null;then
         echo "check uuidgen ok"
     else
-        echo "uuidgen ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… uuid-runtime"
+        echo "uuidgen ³ÌĞò²»´æÔÚ£¬Çë°²×° uuid-runtime"
         exit 1
     fi
 
     if losetup -V >/dev/null;then
         echo "check losetup ok"
     else
-        echo "losetup ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… mount"
+        echo "losetup ³ÌĞò²»´æÔÚ£¬Çë°²×° mount"
         exit 1
     fi
 
@@ -142,25 +142,25 @@ function check_depends() {
         if [ $m_v -gt 2 ] || [ $m_v -eq 2 ] && [ $s_v -ge 33 ];then
             echo "check lsblk ok"
         else
-            echo "lsblk éœ€è¦ç‰ˆæœ¬ 2.33 æˆ–æ›´é«˜çš„ç‰ˆæœ¬, å½“å‰çš„ç‰ˆæœ¬æ˜¯ $lsblk_version !"
+            echo "lsblk ĞèÒª°æ±¾ 2.33 »ò¸ü¸ßµÄ°æ±¾, µ±Ç°µÄ°æ±¾ÊÇ $lsblk_version !"
             exit 1
         fi        
     else
-        echo "lsblk ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… util-linux"
+        echo "lsblk ³ÌĞò²»´æÔÚ£¬Çë°²×° util-linux"
         exit 1
     fi
 
     if fdisk --version >/dev/null 2>&1;then
         echo "check fdisk ok"
     else
-        echo "fdisk ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… fdisk"
+        echo "fdisk ³ÌĞò²»´æÔÚ£¬Çë°²×° fdisk"
         exit 1
     fi
 
     if parted --version >/dev/null 2>&1;then
         echo "check parted ok"
     else
-        echo "parted ç¨‹åºä¸å­˜åœ¨ï¼Œè¯·å®‰è£… parted"
+        echo "parted ³ÌĞò²»´æÔÚ£¬Çë°²×° parted"
         exit 1
     fi
     echo
@@ -210,44 +210,44 @@ function create_image() {
     local img_name=$1
     local size_mb=$2
     if [ "$img_name" == "" ];then
-        echo "é•œåƒåç§°ä¸ºç©ºï¼Œè¯·æŒ‡å®šä¸€ä¸ªå…·ä½“çš„é•œåƒåç§°ï¼"
+        echo "¾µÏñÃû³ÆÎª¿Õ£¬ÇëÖ¸¶¨Ò»¸ö¾ßÌåµÄ¾µÏñÃû³Æ£¡"
         exit 1
     fi
 
     if [ "$size_mb" == "" ];then
-        echo "é•œåƒå¤§å°ä¸ºç©ºï¼Œè¯·æŒ‡å®šä¸å°äº 1 çš„æ•´æ•°å°ºå¯¸ï¼"
+        echo "¾µÏñ´óĞ¡Îª¿Õ£¬ÇëÖ¸¶¨²»Ğ¡ÓÚ 1 µÄÕûÊı³ß´ç£¡"
         exit 1
     fi
     
-    echo "åˆ›å»ºç©ºç™½çš„ç›®æ ‡é•œåƒæ–‡ä»¶, å¤§å°æ˜¯ $size_mb MB  ... "
+    echo "´´½¨¿Õ°×µÄÄ¿±ê¾µÏñÎÄ¼ş, ´óĞ¡ÊÇ $size_mb MB  ... "
     dd if=/dev/zero of="$img_name" bs=1M count=$size_mb conv=fsync && sync
     if [ $? -ne 0 ];then
-        echo "ç©ºç™½é•œåƒåˆ›å»ºå¤±è´¥ï¼"
+        echo "¿Õ°×¾µÏñ´´½¨Ê§°Ü£¡"
         exit 1
     else
-        echo "ç©ºç™½é•œåƒåˆ›å»ºæˆåŠŸ"
+        echo "¿Õ°×¾µÏñ´´½¨³É¹¦"
     fi
 
-    echo -n "è®¾ç½®åˆ†åŒºå¾ªç¯è®¾å¤‡ ... "
+    echo -n "ÉèÖÃ·ÖÇøÑ­»·Éè±¸ ... "
     losetup -f -P "$img_name"
     if [ $? -ne 0 ];then
-        echo "å¤±è´¥ï¼"
+        echo "Ê§°Ü£¡"
         exit 1
     else
         TGT_DEV=$(losetup | grep "$img_name" | gawk '{print $1}')
         export TGT_DEV
-        echo "æˆåŠŸ: [$TGT_DEV]"
+        echo "³É¹¦: [$TGT_DEV]"
     fi
     echo
 }
 
-# åˆ›å»ºåˆ†åŒº(å…è®¸åœ¨ç©ºç™½ç£ç›˜é‡Œæ–°å»ºåˆ†åŒºï¼Œä¹Ÿå…è®¸åœ¨ç°æœ‰åˆ†åŒºè¡¨ä¸­æ‰©å……åˆ†åŒº)
-# å‚æ•°1ï¼š å—è®¾å¤‡å
-# å‚æ•°2ï¼š åˆ†åŒºè¡¨ç±»å‹ï¼š msdos|gpt|auto  autoè¡¨ç¤ºåœ¨ç°æœ‰çš„ç£ç›˜ä¸­æ·»åŠ æ–°åˆ†åŒº
-# å‚æ•°3+4+5ï¼š åˆ†åŒº1è·³è¿‡MB åˆ†åŒº1å¤§å°MB åˆ†åŒº1ç±»å‹
-# å‚æ•°6+7+8ï¼š åˆ†åŒº2è·³è¿‡MB åˆ†åŒº2å¤§å°MB åˆ†åŒº2ç±»å‹
-# å‚æ•°9+10+11ï¼š åˆ†åŒº3è·³è¿‡MB åˆ†åŒº3å¤§å°MB åˆ†åŒº3ç±»å‹
-# å‚æ•°12+13+14: åˆ†åŒº4è·³è¿‡MB åˆ†åŒº4å¤§å°MB åˆ†åŒº4ç±»å‹
+# ´´½¨·ÖÇø(ÔÊĞíÔÚ¿Õ°×´ÅÅÌÀïĞÂ½¨·ÖÇø£¬Ò²ÔÊĞíÔÚÏÖÓĞ·ÖÇø±íÖĞÀ©³ä·ÖÇø)
+# ²ÎÊı1£º ¿éÉè±¸Ãû
+# ²ÎÊı2£º ·ÖÇø±íÀàĞÍ£º msdos|gpt|auto  auto±íÊ¾ÔÚÏÖÓĞµÄ´ÅÅÌÖĞÌí¼ÓĞÂ·ÖÇø
+# ²ÎÊı3+4+5£º ·ÖÇø1Ìø¹ıMB ·ÖÇø1´óĞ¡MB ·ÖÇø1ÀàĞÍ
+# ²ÎÊı6+7+8£º ·ÖÇø2Ìø¹ıMB ·ÖÇø2´óĞ¡MB ·ÖÇø2ÀàĞÍ
+# ²ÎÊı9+10+11£º ·ÖÇø3Ìø¹ıMB ·ÖÇø3´óĞ¡MB ·ÖÇø3ÀàĞÍ
+# ²ÎÊı12+13+14: ·ÖÇø4Ìø¹ıMB ·ÖÇø4´óĞ¡MB ·ÖÇø4ÀàĞÍ
 # ...
 function create_partition() {
     local device_name=$1
@@ -276,28 +276,28 @@ function create_partition() {
                           cur_pt_cnt=$(parted $device_name print | gawk '$1 ~ /^[0-9]+$/ {print $1}' | tail -n1)
                           [ "$cur_pt_cnt" == "" ] && cur_pt_cnt=0
                           ;;
-                       *) # è‡ªåŠ¨æ¨¡å¼ä¸‹ï¼Œå¦‚æœæ£€æµ‹åˆ°ç©ºç™½ç£ç›˜ï¼Œå°†ä¼šç”¨msdosæ ¼å¼æ–°å»ºåˆ†åŒºè¡¨
+                       *) # ×Ô¶¯Ä£Ê½ÏÂ£¬Èç¹û¼ì²âµ½¿Õ°×´ÅÅÌ£¬½«»áÓÃmsdos¸ñÊ½ĞÂ½¨·ÖÇø±í
                           partition_label="msdos"
                           max_pt_cnt=4
                           cur_pt_cnt=0
                           ;;
                esac
                ;;
-            *) echo "æœªæŒ‡å®šåˆ†åŒºè¡¨ç±»å‹, å¿…é¡»ä¸º gpt|msdos|auto"
+            *) echo "Î´Ö¸¶¨·ÖÇø±íÀàĞÍ, ±ØĞëÎª gpt|msdos|auto"
                exit 1
                ;;
     esac
 
-    echo "å¯¹ç£ç›˜è®¾å¤‡ [$device_name] è¿›è¡Œåˆ†åŒº ..."
+    echo "¶Ô´ÅÅÌÉè±¸ [$device_name] ½øĞĞ·ÖÇø ..."
     if [ $cur_pt_cnt -eq 0 ];then
-        echo -n "åˆ›å»ºæ–°çš„åˆ†åŒºè¡¨ ... "
+        echo -n "´´½¨ĞÂµÄ·ÖÇø±í ... "
         parted -s ${device_name} mklabel ${partition_label} 2>/dev/null
         if [ $? -ne 0 ];then
-            echo "å¤±è´¥!"
+            echo "Ê§°Ü!"
             detach_loopdev
             exit 1
         else
-            echo "æˆåŠŸ"
+            echo "³É¹¦"
         fi
     fi
 
@@ -322,26 +322,26 @@ function create_partition() {
 
         local end
         if [ "${pt_size}" == "-1" ] || [ "${pt_size}" == "100%" ];then
-            echo -n "åˆ›å»ºç¬¬ [$i] ä¸ªåˆ†åŒº, åˆ†åŒºå¤§å°: æ‰€æœ‰å‰©ä½™ç©ºé—´, åˆ†åŒºç±»å‹: [$pt_type] ... "
+            echo -n "´´½¨µÚ [$i] ¸ö·ÖÇø, ·ÖÇø´óĞ¡: ËùÓĞÊ£Óà¿Õ¼ä, ·ÖÇøÀàĞÍ: [$pt_type] ... "
             parted -s ${device_name} mkpart primary ${pt_type} ${start}b "100%" 2>/dev/null
             if [ $? -ne 0 ];then
-                echo "å¤±è´¥!"
+                echo "Ê§°Ü!"
                 detach_loopdev
                 exit 1
             else
-                echo "æˆåŠŸ"
+                echo "³É¹¦"
                 break
             fi
         else
             end=$(( pt_size * 1024 * 1024 +  start - 1 ))
-            echo -n "åˆ›å»ºç¬¬ [$i] ä¸ªåˆ†åŒº, åˆ†åŒºå¤§å°: [$pt_size] MB, åˆ†åŒºç±»å‹: [$pt_type] ... "
+            echo -n "´´½¨µÚ [$i] ¸ö·ÖÇø, ·ÖÇø´óĞ¡: [$pt_size] MB, ·ÖÇøÀàĞÍ: [$pt_type] ... "
             parted -s ${device_name} mkpart primary ${pt_type} ${start}b ${end}b 2>/dev/null
             if [ $? -ne 0 ];then
-                echo "å¤±è´¥!"
+                echo "Ê§°Ü!"
                 detach_loopdev
                 exit 1
             else
-                echo "æˆåŠŸ"
+                echo "³É¹¦"
             fi
         fi
 
@@ -349,34 +349,34 @@ function create_partition() {
         i=$((i + 1))
     done
 
-    echo "[$device_name] ç£ç›˜åˆ†åŒºä¸€è§ˆ:"
+    echo "[$device_name] ´ÅÅÌ·ÖÇøÒ»ÀÀ:"
     echo "==================================================================="
     fdisk -l $device_name 2>/dev/null
     echo "==================================================================="
     echo
 }
 
-# æ ¼å¼åŒ–æ–‡ä»¶ç³»ç»Ÿ
-# å‚æ•°1:  å—è®¾å¤‡å
-# å‚æ•°2:  åˆ†åŒº1ç”¨é€”: boot=B rootfs=R other=O
-# å‚æ•°3ï¼š åˆ†åŒº1ç±»å‹: fat32|ext4|xfs|btrfs|f2fs
-# å‚æ•°4ï¼š åˆ†åŒº1å·æ ‡
-# å‚æ•°5:  åˆ†åŒº2ç”¨é€”: boot=B rootfs=R other=O
-# å‚æ•°6ï¼š åˆ†åŒº2ç±»å‹: fat32|ext4|xfs|btrfs|f2fs
-# å‚æ•°7ï¼š åˆ†åŒº2å·æ ‡
-# å‚æ•°8:  åˆ†åŒº3ç”¨é€”: boot=B rootfs=R other=O
-# å‚æ•°9ï¼š åˆ†åŒº3ç±»å‹: fat32|ext4|xfs|btrfs|f2fs
-# å‚æ•°10: åˆ†åŒº3å·æ ‡
-# å‚æ•°11: åˆ†åŒº4ç”¨é€”: boot=B rootfs=R other=O
-# å‚æ•°12: åˆ†åŒº4ç±»å‹: fat32|ext4|xfs|btrfs|f2fs
-# å‚æ•°13ï¼šåˆ†åŒº4å·æ ‡
+# ¸ñÊ½»¯ÎÄ¼şÏµÍ³
+# ²ÎÊı1:  ¿éÉè±¸Ãû
+# ²ÎÊı2:  ·ÖÇø1ÓÃÍ¾: boot=B rootfs=R other=O
+# ²ÎÊı3£º ·ÖÇø1ÀàĞÍ: fat32|ext4|xfs|btrfs|f2fs
+# ²ÎÊı4£º ·ÖÇø1¾í±ê
+# ²ÎÊı5:  ·ÖÇø2ÓÃÍ¾: boot=B rootfs=R other=O
+# ²ÎÊı6£º ·ÖÇø2ÀàĞÍ: fat32|ext4|xfs|btrfs|f2fs
+# ²ÎÊı7£º ·ÖÇø2¾í±ê
+# ²ÎÊı8:  ·ÖÇø3ÓÃÍ¾: boot=B rootfs=R other=O
+# ²ÎÊı9£º ·ÖÇø3ÀàĞÍ: fat32|ext4|xfs|btrfs|f2fs
+# ²ÎÊı10: ·ÖÇø3¾í±ê
+# ²ÎÊı11: ·ÖÇø4ÓÃÍ¾: boot=B rootfs=R other=O
+# ²ÎÊı12: ·ÖÇø4ÀàĞÍ: fat32|ext4|xfs|btrfs|f2fs
+# ²ÎÊı13£º·ÖÇø4¾í±ê
 function make_filesystem() {
     local device_name=$1
     check_block_dev $device_name
     shift
 
     echo "==================================================================="
-    echo "åœ¨ [$device_name] ä¸Šåˆ›å»ºæ–‡ä»¶ç³»ç»Ÿ ... " 
+    echo "ÔÚ [$device_name] ÉÏ´´½¨ÎÄ¼şÏµÍ³ ... " 
     i=1
     while [ $i -le 4 ]; do
         local fs_use=$1
@@ -407,61 +407,61 @@ function make_filesystem() {
                export ROOTFS_UUID ROOTFS_LABEL
                ;;
             O) ;;
-            *) echo "åˆ†åŒºç”¨é€”ï¼š [$fs_use] æ— æ³•è¯†åˆ«ï¼ä»…æ”¯æŒ B/R/O ä¸‰ç§!"
+            *) echo "·ÖÇøÓÃÍ¾£º [$fs_use] ÎŞ·¨Ê¶±ğ£¡½öÖ§³Ö B/R/O ÈıÖÖ!"
                detach_loopdev
                exit 1
                ;;
         esac
 
-        echo "æ ¼å¼åŒ– [${device_name}p${i}], ç±»å‹ä¸º [$fs_type], å·æ ‡ä¸º [$fs_label] ... "
+        echo "¸ñÊ½»¯ [${device_name}p${i}], ÀàĞÍÎª [$fs_type], ¾í±êÎª [$fs_label] ... "
         wait_dev ${device_name}p${i}
         case $fs_type in 
             fat32) mkfs.vfat -n "${fs_label}" ${device_name}p${i}
                    if [ $? -ne 0 ];then
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–å¤±è´¥ï¼"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯Ê§°Ü£¡"
                         detach_loopdev
                         exit 1
                    else
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–æˆåŠŸ"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯³É¹¦"
                    fi
                    ;;
              ext4) mkfs.ext4 -U ${fs_uuid} -L "${fs_label}" ${device_name}p${i}
                    if [ $? -ne 0 ];then
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–å¤±è´¥ï¼"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯Ê§°Ü£¡"
                         detach_loopdev
                         exit 1
                    else
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–æˆåŠŸ"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯³É¹¦"
                    fi
                    ;;
               xfs) mkfs.xfs -U ${fs_uuid} -L "${fs_label}" ${device_name}p${i}
                    if [ $? -ne 0 ];then
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–å¤±è´¥ï¼"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯Ê§°Ü£¡"
                         detach_loopdev
                         exit 1
                    else
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–æˆåŠŸ"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯³É¹¦"
                    fi
                    ;;
              f2fs) mkfs.f2fs -U ${fs_uuid} -l "${fs_label}" ${device_name}p${i}
                    if [ $? -ne 0 ];then
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–å¤±è´¥ï¼"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯Ê§°Ü£¡"
                         detach_loopdev
                         exit 1
                    else
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–æˆåŠŸ"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯³É¹¦"
                    fi
                    ;;
             btrfs) mkfs.btrfs -U ${fs_uuid} -L "${fs_label}" -m single ${device_name}p${i}
                    if [ $? -ne 0 ];then
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–å¤±è´¥ï¼"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯Ê§°Ü£¡"
                         detach_loopdev
                         exit 1
                    else
-                        echo "[${device_name}p${i}] æ ¼å¼åŒ–æˆåŠŸ"
+                        echo "[${device_name}p${i}] ¸ñÊ½»¯³É¹¦"
                    fi
                    ;;
-                *) echo "æ–‡ä»¶ç³»ç»Ÿç±»å‹ [$fs_type] ä¸å—æ”¯æŒ!"
+                *) echo "ÎÄ¼şÏµÍ³ÀàĞÍ [$fs_type] ²»ÊÜÖ§³Ö!"
                    detach_loopdev
                    exit 1
                    ;;
@@ -469,7 +469,7 @@ function make_filesystem() {
 
         i=$((i+1))
     done
-    echo "[$device_name] æ–‡ä»¶ç³»ç»Ÿå·²åˆ›å»º." 
+    echo "[$device_name] ÎÄ¼şÏµÍ³ÒÑ´´½¨." 
     echo "==================================================================="
     echo
 }
@@ -483,30 +483,30 @@ function mount_fs() {
 
     local fs_type=$3
     if [ -z "$fs_type" ];then
-         echo "æœªæŒ‡å®šæ–‡ä»¶ç³»ç»Ÿç±»å‹"
+         echo "Î´Ö¸¶¨ÎÄ¼şÏµÍ³ÀàĞÍ"
          detach_loopdev
          exit 1
     fi
 
     local mount_options=$4
 
-    echo -n "æŒ‚è½½ ${device_name} --> ${mount_point} ... "
+    echo -n "¹ÒÔØ ${device_name} --> ${mount_point} ... "
     if [ "$mount_options" == "" ];then
         mount -t "$fs_type" "$device_name" "$mount_point"
     else
         mount -t "$fs_type" -o "$mount_options" "$device_name" "$mount_point"
     fi
     if [ $? -ne 0 ];then
-         echo "å¤±è´¥!"
+         echo "Ê§°Ü!"
          detach_loopdev
          exit 1
     else
-         echo "æˆåŠŸ"
+         echo "³É¹¦"
     fi
 }
 
 function extract_rootfs_files() {
-   echo -n "é‡Šæ”¾ Openwrt rootfs å‹ç¼©åŒ… ... "
+   echo -n "ÊÍ·Å Openwrt rootfs Ñ¹Ëõ°ü ... "
    (
        cd ${TGT_ROOT} && \
           tar --exclude="./lib/firmware/*" --exclude="./lib/modules/*" -xzf "$OPWRT_ROOTFS_GZ" && \
@@ -514,13 +514,13 @@ function extract_rootfs_files() {
           sync
    )
    if [ $? -ne 0 ];then
-        echo "å¤±è´¥ï¼"
+        echo "Ê§°Ü£¡"
         detach_loopdev
         exit 1
    else 
-        echo "å®Œæˆ"
+        echo "Íê³É"
    fi
-   echo -n "è£å‡ Rootfs ä¸­ç”¨ä¸åˆ°çš„æ–‡ä»¶ ... "
+   echo -n "²Ã¼õ Rootfs ÖĞÓÃ²»µ½µÄÎÄ¼ş ... "
    (
        cd ${TGT_ROOT}
        rm -rf ./lib/firmware/* ./lib/modules/*
@@ -531,15 +531,15 @@ function extract_rootfs_files() {
        rm -f ./etc/rc.d/S80nginx 2>/dev/null
        local ps="${PLATFORM}_${SOC}"
        case $ps in 
-           amlogic_s905) # s905ä¸æ”¯æŒç¡¬ä»¶aesï¼Œæ‰€ä»¥å¿…é¡»åˆ é™¤ ss-rust ç¨‹åº
+           amlogic_s905) # s905²»Ö§³ÖÓ²¼şaes£¬ËùÒÔ±ØĞëÉ¾³ı ss-rust ³ÌĞò
                          [ -f ./usr/bin/sslocal ] && rm -f ./usr/bin/sslocal
                          [ -f ./usr/bin/ssserver ] && rm -f ./usr/bin/ssserver
                          ;;
        esac
    )
-   echo "å®Œæˆ"
+   echo "Íê³É"
 
-   echo -n "é‡æ–°é“¾æ¥ kmod ç¨‹åº ... "
+   echo -n "ÖØĞÂÁ´½Ó kmod ³ÌĞò ... "
    (  cd $TGT_ROOT/sbin 
       [ ! -x "kmod" ] && [ -f "${KMOD}" ] && cp "$KMOD" kmod
       if [ -x "kmod" ];then
@@ -552,60 +552,60 @@ function extract_rootfs_files() {
           ln -sf kmod rmmod
       fi
    )
-   echo "å®Œæˆ"
+   echo "Íê³É"
 
-   echo -n "é‡Šæ”¾ Armbian firmware å‹ç¼©åŒ… ... "
+   echo -n "ÊÍ·Å Armbian firmware Ñ¹Ëõ°ü ... "
    ( cd ${TGT_ROOT} && tar xJf "$FIRMWARE_TXZ" && sync )
    if [ $? -ne 0 ];then
-        echo "å¤±è´¥ï¼"
+        echo "Ê§°Ü£¡"
         detach_loopdev
         exit 1
    else 
-        echo "å®Œæˆ"
+        echo "Íê³É"
    fi
 
    if [ -d "${FMW_HOME}" ];then
-       echo -n "å¤åˆ¶ Added firmware æ–‡ä»¶ ... "
+       echo -n "¸´ÖÆ Added firmware ÎÄ¼ş ... "
        ( cd ${TGT_ROOT} && cp -a ${FMW_HOME}/* lib/firmware/ && sync )
-       echo "å®Œæˆ"
+       echo "Íê³É"
    fi
 
-   echo -n "ä¼˜åŒ– firmware ... "
+   echo -n "ÓÅ»¯ firmware ... "
    (
        cd $TGT_ROOT/lib/firmware
        mv *.hcd brcm/ 2>/dev/null
        [ -f "$REGULATORY_DB" ] && tar xzf "$REGULATORY_DB"
        cd brcm
 
-       # gtking/gtking pro é‡‡ç”¨ bcm4356 wifi/bluetooth æ¨¡å—
+       # gtking/gtking pro ²ÉÓÃ bcm4356 wifi/bluetooth Ä£¿é
        get_random_mac
        # wifi5 module AP6356S
        sed -e "s/macaddr=00:90:4c:1a:10:01/macaddr=${MACADDR}/" "brcmfmac4356-sdio.txt" > "brcmfmac4356-sdio.azw,gtking.txt"
        get_random_mac
        # wifi6 module AP6275S
        sed -e "s/macaddr=00:90:4c:12:d0:01/macaddr=${MACADDR}/" "brcmfmac4375-sdio.txt" > "brcmfmac4375-sdio.azw,gtking.txt"
-       # Phicomm N1 é‡‡ç”¨ bcm43455 wifi/bluetooth æ¨¡å—
+       # Phicomm N1 ²ÉÓÃ bcm43455 wifi/bluetooth Ä£¿é
        get_random_mac
        sed -e "s/macaddr=b8:27:eb:74:f2:6c/macaddr=${MACADDR}/" "brcmfmac43455-sdio.txt" > "brcmfmac43455-sdio.phicomm,n1.txt"
-       # MXQ Pro+ é‡‡ç”¨ AP6330(bcm4330) wifi/bluetooth æ¨¡å—
+       # MXQ Pro+ ²ÉÓÃ AP6330(bcm4330) wifi/bluetooth Ä£¿é
        get_random_mac
        sed -e "s/macaddr=00:90:4c:c5:12:38/macaddr=${MACADDR}/" "brcmfmac4330-sdio.txt" > "brcmfmac4330-sdio.crocon,mxq-pro-plus.txt"
-       # HK1 Box å’Œ H96 Max X3 é‡‡ç”¨ bcm54339 wifi/bluetooth æ¨¡å—
+       # HK1 Box ºÍ H96 Max X3 ²ÉÓÃ bcm54339 wifi/bluetooth Ä£¿é
        get_random_mac
        sed -e "s/macaddr=00:90:4c:c5:12:38/macaddr=${MACADDR}/" "brcmfmac4339-sdio.ZP.txt" > "brcmfmac4339-sdio.amlogic,sm1.txt"
-       # æ—§ç‰ˆugoos x3 é‡‡ç”¨ bcm43455 wifi/bluetooth æ¨¡å—
+       # ¾É°æugoos x3 ²ÉÓÃ bcm43455 wifi/bluetooth Ä£¿é
        get_random_mac
        sed -e "s/macaddr=b8:27:eb:74:f2:6c/macaddr=${MACADDR}/" "brcmfmac43455-sdio.txt" > "brcmfmac43455-sdio.amlogic,sm1.txt"
-       # æ–°ç‰ˆugoos x3 é‡‡ç”¨ brm43456
+       # ĞÂ°æugoos x3 ²ÉÓÃ brm43456
        get_random_mac
        sed -e "s/macaddr=b8:27:eb:74:f2:6c/macaddr=${MACADDR}/" "brcmfmac43456-sdio.txt" > "brcmfmac43456-sdio.amlogic,sm1.txt"
-       # V5.1ç‰ˆ x96max plus é‡‡ç”¨ AM7256 (brcm4354)
+       # V5.1°æ x96max plus ²ÉÓÃ AM7256 (brcm4354)
        get_random_mac
        sed -e "s/macaddr=00:90:4c:00:43:54/macaddr=${MACADDR}/" "brcmfmac4354-sdio.txt" > "brcmfmac4354-sdio.amlogic,sm1.txt"
    )
-   echo "å®Œæˆ"
+   echo "Íê³É"
 
-   echo -n "é‡Šæ”¾ Kernel modules å‹ç¼©åŒ… ... "
+   echo -n "ÊÍ·Å Kernel modules Ñ¹Ëõ°ü ... "
    ( 
       cd ${TGT_ROOT} && \
           mkdir -p lib/modules && \
@@ -617,22 +617,22 @@ function extract_rootfs_files() {
           sync
    )
    if [ $? -ne 0 ];then
-        echo "å¤±è´¥ï¼"
+        echo "Ê§°Ü£¡"
         detach_loopdev
         exit 1
    else 
-        echo "å®Œæˆ"
+        echo "Íê³É"
    fi
 
    if [ -n "$MODEL_DB" ] && [ -f "$MODEL_DB" ];then
-       echo "å¤åˆ¶ç¡¬ä»¶æœºå‹æ•°æ®åº“ ..."
+       echo "¸´ÖÆÓ²¼ş»úĞÍÊı¾İ¿â ..."
        cp -v "$MODEL_DB" ${TGT_ROOT}/etc/model_database.txt
-       echo "å®Œæˆ"
+       echo "Íê³É"
    fi 
 }
 
 function extract_amlogic_boot_files() {
-    echo -n "é‡Šæ”¾ Kernel zImageã€uInitrd åŠ dtbs å‹ç¼©åŒ… ... "
+    echo -n "ÊÍ·Å Kernel zImage¡¢uInitrd ¼° dtbs Ñ¹Ëõ°ü ... "
     ( 
         cd ${TGT_BOOT} && \
             cp "${BOOTFILES_HOME}"/* . && \
@@ -647,31 +647,31 @@ function extract_amlogic_boot_files() {
             sync
     )
     if [ $? -ne 0 ];then
-         echo "å¤±è´¥ï¼"
+         echo "Ê§°Ü£¡"
          detach_loopdev
          exit 1
     fi
     ( 
         cd ${TGT_BOOT}
-        # 5.4å†…æ ¸ä¸å†éœ€è¦u-boot.sd ä»¥åŠ u-boot.usb
+        # 5.4ÄÚºË²»ÔÙĞèÒªu-boot.sd ÒÔ¼° u-boot.usb
         rm -f u-boot.usb u-boot.sd
-        # 5.10ä»¥åçš„å†…æ ¸ï¼Œéœ€è¦å¢åŠ u-booté‡è½½
-        # 5.4å†…æ ¸å¯åŠ å¯ä¸åŠ 
+        # 5.10ÒÔºóµÄÄÚºË£¬ĞèÒªÔö¼Óu-bootÖØÔØ
+        # 5.4ÄÚºË¿É¼Ó¿É²»¼Ó
         if [ $K510 -eq 1 ];then
             check_file ${UBOOT_WITHOUT_FIP}
             cp -f ${UBOOT_WITHOUT_FIP} u-boot.ext
             if [ $? -ne 0 ];then
-                echo "å¤±è´¥ï¼"
+                echo "Ê§°Ü£¡"
                 detach_loopdev
                 exit 1
             fi
         fi
     ) 
-    echo "å®Œæˆ"
+    echo "Íê³É"
 }
 
 function extract_rockchip_boot_files() {
-    echo -n "é‡Šæ”¾ Kernel zImageã€uInitrd åŠ dtbs å‹ç¼©åŒ… ... "
+    echo -n "ÊÍ·Å Kernel zImage¡¢uInitrd ¼° dtbs Ñ¹Ëõ°ü ... "
     ( 
           cd ${TGT_BOOT} && \
               cp "${BOOTFILES_HOME}"/* . && \
@@ -686,16 +686,16 @@ function extract_rockchip_boot_files() {
               sync
     )
     if [ $? -ne 0 ];then
-        echo "å¤±è´¥ï¼"
+        echo "Ê§°Ü£¡"
         detach_loopdev
         exit 1
     else 
-        echo "å®Œæˆ"
+        echo "Íê³É"
     fi
 }
 
 function extract_allwinner_boot_files() {
-    echo -n "é‡Šæ”¾ Kernel zImageã€uInitrd åŠ dtbs å‹ç¼©åŒ… ... "
+    echo -n "ÊÍ·Å Kernel zImage¡¢uInitrd ¼° dtbs Ñ¹Ëõ°ü ... "
     ( 
         cd ${TGT_BOOT} && \
             cp "${BOOTFILES_HOME}"/* . && \
@@ -709,17 +709,17 @@ function extract_allwinner_boot_files() {
             sync
     )
     if [ $? -ne 0 ];then
-        echo "å¤±è´¥ï¼"
+        echo "Ê§°Ü£¡"
         detach_loopdev
         exit 1
     else 
-        echo "å®Œæˆ"
+        echo "Íê³É"
     fi
 }
 
-# ç”Ÿæˆ openwrt æ‰€éœ€çš„ fstab æ–‡ä»¶
+# Éú³É openwrt ËùĞèµÄ fstab ÎÄ¼ş
 function create_fstab_config() {
-    echo "åˆ›å»º fstab é…ç½®æ–‡ä»¶ ... "
+    echo "´´½¨ fstab ÅäÖÃÎÄ¼ş ... "
     (
         cd $TGT_ROOT
         if [ ! -z "${BOOT_UUID}" ];then
@@ -772,16 +772,16 @@ EOF
 EOF
         fi
     )
-    echo "å½“å‰ fstab å†…å®¹å¦‚ä¸‹ï¼š"
+    echo "µ±Ç° fstab ÄÚÈİÈçÏÂ£º"
     echo "==============================================="
     cat $TGT_ROOT/etc/config/fstab
     echo "==============================================="
     echo
 }
 
-# è°ƒæ•´ntfsç›¸å…³é…ç½®
+# µ÷ÕûntfsÏà¹ØÅäÖÃ
 function adjust_ntfs_config() {
-    echo -n "è°ƒæ•´ ntfs é…ç½® ... "
+    echo -n "µ÷Õû ntfs ÅäÖÃ ... "
     ( 
         cd $TGT_ROOT/sbin
         if ls ../usr/lib/opkg/info/ntfs3* >/dev/null 2>&1;then
@@ -790,7 +790,7 @@ function adjust_ntfs_config() {
 #!/bin/sh
 
 function check_k515() {
-    # åˆ¤æ–­å†…æ ¸ç‰ˆæœ¬æ˜¯å¦ >= 5.15
+    # ÅĞ¶ÏÄÚºË°æ±¾ÊÇ·ñ >= 5.15
     K_VER=\$(uname -r | cut -d '.' -f1)
     K_MAJ=\$(uname -r | cut -d '.' -f2)
 
@@ -817,19 +817,19 @@ fi
 
 EOF
             chmod 755 mount.ntfs
-            echo "å‘ç° ntfs3, è°ƒæ•´å®Œæˆ"
+            echo "·¢ÏÖ ntfs3, µ÷ÕûÍê³É"
         elif ls ../usr/lib/opkg/info/ntfs-3g* >/dev/null 2>&1;then
             ln -sf /usr/bin/ntfs-3g mount.ntfs
-            echo "å‘ç° ntfs-3g, è°ƒæ•´å®Œæˆ"
+            echo "·¢ÏÖ ntfs-3g, µ÷ÕûÍê³É"
         else
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
     )
 }
 
-# è°ƒæ•´ turboacc ç›¸å…³é…ç½®
+# µ÷Õû turboacc Ïà¹ØÅäÖÃ
 function adjust_turboacc_config() {
-    echo -n "è°ƒæ•´ turboacc é…ç½® ... "
+    echo -n "µ÷Õû turboacc ÅäÖÃ ... "
     ( 
         cd $TGT_ROOT
         if [ -f ./etc/config/turboacc ];then
@@ -850,43 +850,43 @@ config turboacc 'config'
 EOF
         fi
     )
-    echo "å®Œæˆ"
+    echo "Íê³É"
 }
 
-# CPUçŠ¶æ€è¡¥ä¸
+# CPU×´Ì¬²¹¶¡
 function patch_admin_status_index_html() {
-    echo "æ‰“è¡¥ä¸ï¼š[çŠ¶æ€é¡µé¢ç›¸å…³ä¿¡æ¯è¡¥ä¸] ... "
+    echo "´ò²¹¶¡£º[×´Ì¬Ò³ÃæÏà¹ØĞÅÏ¢²¹¶¡] ... "
     (  
         cd $TGT_ROOT
         if [ ! -f usr/bin/perl ];then
-             echo "æœªå‘ç° perl å®ç”¨ç¨‹åº, æ”¾å¼ƒè¡¥ä¸!"
+             echo "Î´·¢ÏÖ perl ÊµÓÃ³ÌĞò, ·ÅÆú²¹¶¡!"
         else 
             if [ -f "$CPUSTAT_PATCH" ];then 
                  patch -p1 < ${CPUSTAT_PATCH} 
                  if [ $? -ne 0 ];then
-                     echo "è¡¥ä¸å¤±è´¥!"
+                     echo "²¹¶¡Ê§°Ü!"
                  else
                      if [ -f "${CPUSTAT_PATCH_02}" ] ;then
                          patch -p1 < ${CPUSTAT_PATCH_02}
                          if [ $? -ne 0 ];then
-                            echo "è¡¥ä¸å¤±è´¥!"
+                            echo "²¹¶¡Ê§°Ü!"
                          fi
                      fi
                  fi
             fi
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
         echo
     )
 }
 
-# å†™å…¥ release ä¿¡æ¯
+# Ğ´Èë release ĞÅÏ¢
 function write_release_info() {
-    echo "å†™å…¥ release ä¿¡æ¯ ... "
+    echo "Ğ´Èë release ĞÅÏ¢ ... "
     (
         cd $TGT_ROOT
 
-        # å†™å…¥ç‰ˆæœ¬ä¿¡æ¯
+        # Ğ´Èë°æ±¾ĞÅÏ¢
         cat > ./etc/flippy-openwrt-release <<EOF
 PLATFORM=${PLATFORM}
 SOC=${SOC}
@@ -917,9 +917,9 @@ EOF
     echo 
 }
 
-# å†™å…¥ banner ä¿¡æ¯
+# Ğ´Èë banner ĞÅÏ¢
 function write_banner() {
-    echo "å†™å…¥ banner ä¿¡æ¯ ... "
+    echo "Ğ´Èë banner ĞÅÏ¢ ... "
     (
         cd $TGT_ROOT
         if [ -f $BANNER ];then
@@ -936,17 +936,13 @@ function write_banner() {
     echo 
 }
 
-# å¤åˆ¶å¢è¡¥æ–‡ä»¶
+# ¸´ÖÆÔö²¹ÎÄ¼ş
 function copy_supplement_files() {
-    echo "å¤åˆ¶å¢è¡¥çš„æ–‡ä»¶ ... "
+    echo "¸´ÖÆÔö²¹µÄÎÄ¼ş ... "
     echo "==============================================================================="
     (
         cd $TGT_ROOT
         [ -n "$DAEMON_JSON" ] && [ -f $DAEMON_JSON ] && mkdir -p "etc/docker" && cp -v $DAEMON_JSON "./etc/docker/daemon.json"
-        [ -n "$COREMARK" ] && [ -f $COREMARK ] && [ -f "etc/coremark.sh" ] && \
-              cp -fv $COREMARK "./etc/coremark.sh" && chmod 755 "etc/coremark.sh" && \
-              rm -f ./etc/bench.log && \
-              echo "17 3 * * * /etc/coremark.sh" >> ./etc/crontabs/root
 
         #[ -n "$TTYD" ] && [ -f $TTYD ] && cp -v $TTYD etc/init.d/
 
@@ -958,7 +954,7 @@ function copy_supplement_files() {
         [ -n "$OPENWRT_UPDATE" ] && [ -f ${OPENWRT_UPDATE} ] && cp -v ${OPENWRT_UPDATE} ./usr/sbin/
 	[ -n "${DDBR}" ] && [ -f "${DDBR}" ] && cp -v ${DDBR} ./usr/sbin/
 
-        # æˆ‘å®¶äº‘, é£æ‰‡è°ƒé€Ÿè„šæœ¬
+        # ÎÒ¼ÒÔÆ, ·çÉÈµ÷ËÙ½Å±¾
         if [ "$PLATFORM" == "rockchip" ] && [ "$SOC" == "rk3328" ] && [ "$BOARD" == "l1pro" ] && [ -f "$PWM_FAN" ];then
             cp -v $PWM_FAN ./usr/bin
             echo "pwm_fan" > ./etc/modules.d/pwm_fan
@@ -996,12 +992,12 @@ EOF
         fi
     )
     echo "==============================================================================="
-    echo "å®Œæˆ"
+    echo "Íê³É"
     echo
 }
 
 function extract_glibc_programs() {
-    echo -n "é‡Šæ”¾åŸºäº glibc çš„å¢è¡¥ç¨‹åºåŒ… ... "
+    echo -n "ÊÍ·Å»ùÓÚ glibc µÄÔö²¹³ÌĞò°ü ... "
     (
         cd $TGT_ROOT
         if [ -f "$SS_LIB" ];then
@@ -1014,41 +1010,41 @@ function extract_glibc_programs() {
                  )
         fi
     )
-    echo "å®Œæˆ"
+    echo "Íê³É"
     echo
 }
 
-# è°ƒæ•´ openssh é…ç½®
+# µ÷Õû openssh ÅäÖÃ
 function adjust_openssh_config() {
-    echo "è°ƒæ•´ openssh é…ç½® ..."
+    echo "µ÷Õû openssh ÅäÖÃ ..."
     echo "==============================================================================="
     (
         cd $TGT_ROOT
         sed -e 's/root::/root:$1$NA6OM0Li$99nh752vw4oe7A.gkm2xk1:/' -i ./etc/shadow
         if [ -f "./etc/ssh/sshd_config" ];then
-            echo -n "é…ç½® sshd_config, å…è®¸ root ç”¨æˆ·ç™»å½• ... "
+            echo -n "ÅäÖÃ sshd_config, ÔÊĞí root ÓÃ»§µÇÂ¼ ... "
             sed -e "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/" -i ./etc/ssh/sshd_config 2>/dev/null
             sed -e "s/#PermitRootLogin no/PermitRootLogin yes/" -i ./etc/ssh/sshd_config 2>/dev/null
-	    echo "å®Œæˆ "
+	    echo "Íê³É "
 	    if [ "$SSH_CIPHERS" != "" ];then
-                echo -n "ä¼˜åŒ– ssh client ciphers ... "
+                echo -n "ÓÅ»¯ ssh client ciphers ... "
 		echo "Host *" >> ./etc/ssh/ssh_config
 		echo "    Ciphers $SSH_CIPHERS" >> ./etc/ssh/ssh_config
-		echo "å®Œæˆ"
+		echo "Íê³É"
 	    fi
 	    if [ "$SSHD_CIPHERS" != "" ];then
-                echo -n "ä¼˜åŒ– ssh server ciphers ... "
+                echo -n "ÓÅ»¯ ssh server ciphers ... "
                 sed -e "/# Ciphers and keying/a\Ciphers $SSHD_CIPHERS" -i ./etc/ssh/sshd_config 2>/dev/null
-		echo "å®Œæˆ"
+		echo "Íê³É"
 	    fi
 	    echo "#HostkeyAlgorithms +ssh-rsa" >> ./etc/ssh/sshd_config
 	    echo "#PubkeyAcceptedAlgorithms +ssh-rsa" >> ./etc/ssh/sshd_config
-	    echo -n "é…ç½® shadow, åˆ·æ–°å¯†ç æ›´æ–°æ—¥æœŸ ... "
+	    echo -n "ÅäÖÃ shadow, Ë¢ĞÂÃÜÂë¸üĞÂÈÕÆÚ ... "
             utc_secs=$(date +%s)
             days=$(( utc_secs / 86400 ))
             sed -e "s/:0:0:99999:7:::/:${days}:0:99999:7:::/" -i ./etc/shadow
-	    echo "å®Œæˆ"
-            echo -n "æ£€æŸ¥sshdç”¨æˆ·å’Œç»„ ... "
+	    echo "Íê³É"
+            echo -n "¼ì²ésshdÓÃ»§ºÍ×é ... "
 	    if ! grep "sshd:x:22:sshd" ./etc/group >/dev/null;then
                  echo "sshd_x:22:sshd" >> ./etc/group
             fi
@@ -1058,9 +1054,9 @@ function adjust_openssh_config() {
 	    if ! grep "sshd:x:" ./etc/shadow >/dev/null;then
                  echo "sshd:x:0:0:99999:7:::" >> ./etc/shadow
             fi
-	    echo "å®Œæˆ"
+	    echo "Íê³É"
 	    
-	    echo -n "æ·»åŠ é˜²ç«å¢™è§„åˆ™ï¼Œä¸¢å¼ƒç›®æ ‡ä¸º WAN åŒºåŸŸ, ç«¯å£ä¸º 22/TCP çš„æŠ¥æ–‡ ... "
+	    echo -n "Ìí¼Ó·À»ğÇ½¹æÔò£¬¶ªÆúÄ¿±êÎª WAN ÇøÓò, ¶Ë¿ÚÎª 22/TCP µÄ±¨ÎÄ ... "
 	    cat >> ./etc/config/firewall <<EOF
 
 config rule
@@ -1072,57 +1068,57 @@ config rule
         option target 'DROP'
 
 EOF
-            echo "å®Œæˆ"
+            echo "Íê³É"
         else
-            echo "æœªå‘ç° openssh é…ç½®æ–‡ä»¶ï¼Œ æ”¾å¼ƒè°ƒæ•´"
+            echo "Î´·¢ÏÖ openssh ÅäÖÃÎÄ¼ş£¬ ·ÅÆúµ÷Õû"
         fi
     )
     echo "==============================================================================="
     echo
 }
 
-# è°ƒæ•´ samba server é…ç½®
+# µ÷Õû samba server ÅäÖÃ
 function adjust_samba_config() {
-    echo "è°ƒæ•´ samba server é…ç½® ..."
+    echo "µ÷Õû samba server ÅäÖÃ ..."
     (
          # for cifsd
          if [ -f ./etc/init.d/cifsd ];then
-             echo -n "å‘ç° cifsd, ç¦ç”¨ samba4. "        
+             echo -n "·¢ÏÖ cifsd, ½ûÓÃ samba4. "        
              rm -f ./etc/rc.d/S98samba4
          fi
           # for smbd
          if [ -f ./etc/init.d/smbd ];then
-             echo -n "å‘ç° smbd, ç¦ç”¨ samba4. "        
+             echo -n "·¢ÏÖ smbd, ½ûÓÃ samba4. "        
              rm -f ./etc/rc.d/S98samba4
          fi                
          # for ksmbd
          if [ -f ./etc/init.d/ksmbd ];then
-             echo -n "å‘ç° ksmbd, ç¦ç”¨ samba4. "        
+             echo -n "·¢ÏÖ ksmbd, ½ûÓÃ samba4. "        
              rm -f ./etc/rc.d/S98samba4
              sed -e 's/modprobe ksmbd/sleep 1 \&\& modprobe ksmbd/' -i ./etc/init.d/ksmbd
          fi
          # for samba4 enable smbv1 protocol
          if [ -f ./etc/config/samba4 ];then
-             echo "å‘ç° samba4, å°†å¯ç”¨ smbv1 åè®®. "        
+             echo "·¢ÏÖ samba4, ½«ÆôÓÃ smbv1 Ğ­Òé. "        
              sed -e 's/services/nas/g' -i ./usr/lib/lua/luci/controller/samba4.lua
 	     sed -e 's/services/nas/g' -i ./usr/share/luci/menu.d/luci-app-samba4.json
 
              [ -f ${SMB4_PATCH} ] && patch -p1 < ${SMB4_PATCH}
          fi
     )
-    echo "å®Œæˆ"
+    echo "Íê³É"
     echo
 }
 
-# è°ƒæ•´ nfs server é…ç½®
+# µ÷Õû nfs server ÅäÖÃ
 function adjust_nfs_config() {
     local mount_point=$1
     [ -z "$mount_point" ] && return
-    echo "è°ƒæ•´ nfs server é…ç½® ... "
+    echo "µ÷Õû nfs server ÅäÖÃ ... "
     (
         # for nfs server
         if [ -f ./etc/init.d/nfsd ];then
-            echo -n "å·²å‘ç° nfsd æœåŠ¡, å°†è°ƒæ•´å…¶åˆå§‹é…ç½®æ–‡ä»¶ ... "
+            echo -n "ÒÑ·¢ÏÖ nfsd ·şÎñ, ½«µ÷ÕûÆä³õÊ¼ÅäÖÃÎÄ¼ş ... "
             cat > ./etc/exports <<EOF
 # /etc/exports: the access control list for filesystems which may be exported
 #               to NFS clients.  See exports(5).
@@ -1154,16 +1150,16 @@ EOF
         fi
 
     )
-    echo "å®Œæˆ, åˆå§‹ nfs é…ç½®æ–‡ä»¶ä¸ºï¼š"
+    echo "Íê³É, ³õÊ¼ nfs ÅäÖÃÎÄ¼şÎª£º"
     echo "==============================================================================="
     cat $TGT_ROOT/etc/config/nfs
     echo "==============================================================================="
     echo
 }
 
-# è°ƒæ•´ openclash é…ç½®
+# µ÷Õû openclash ÅäÖÃ
 function adjust_openclash_config() {
-    echo -n "è°ƒæ•´ openclash é…ç½® ... "
+    echo -n "µ÷Õû openclash ÅäÖÃ ... "
     (
         cd $TGT_ROOT
         if [ -d ./etc/openclash/core ];then
@@ -1171,16 +1167,16 @@ function adjust_openclash_config() {
             cd ./etc/openclash && \
             mv core ../../usr/share/openclash/ && \
             ln -s ../../usr/share/openclash/core .
-            echo "å®Œæˆ"
+            echo "Íê³É"
         else
-            echo "æœªå‘ç° openclash, æ”¾å¼ƒè°ƒæ•´"
+            echo "Î´·¢ÏÖ openclash, ·ÅÆúµ÷Õû"
         fi
     )
 }
 
-# è°ƒæ•´ getty é…ç½®
+# µ÷Õû getty ÅäÖÃ
 function adjust_getty_config() {
-    echo -n "è°ƒæ•´ getty é…ç½® ..."
+    echo -n "µ÷Õû getty ÅäÖÃ ..."
     (
         cd $TGT_ROOT
         case $PLATFORM in
@@ -1189,7 +1185,7 @@ function adjust_getty_config() {
 ::shutdown:/etc/init.d/rcS K shutdown
 ttyS0::askfirst:/usr/libexec/login.sh
 EOF
-                         echo "å®Œæˆ"
+                         echo "Íê³É"
                          ;;
              rockchip)   cat > ./etc/inittab <<EOF
 ::sysinit:/etc/init.d/rcS S boot
@@ -1197,7 +1193,7 @@ EOF
 tty1::askfirst:/usr/libexec/login.sh
 ttyS2::askfirst:/usr/libexec/login.sh
 EOF
-                         echo "å®Œæˆ"
+                         echo "Íê³É"
                          ;;
              amlogic)    cat > ./etc/inittab <<EOF
 ::sysinit:/etc/init.d/rcS S boot
@@ -1205,55 +1201,55 @@ EOF
 ttyAML0::askfirst:/usr/libexec/login.sh
 tty0::askfirst:/usr/libexec/login.sh
 EOF
-                         echo "å®Œæˆ"
+                         echo "Íê³É"
                          ;;
-                   *)    echo "Platform: ${PLATFORM} ä¸å—æ”¯æŒï¼æ”¾å¼ƒè°ƒæ•´"
+                   *)    echo "Platform: ${PLATFORM} ²»ÊÜÖ§³Ö£¡·ÅÆúµ÷Õû"
                          ;;
         esac
     )
 }
 
-# qbittorrent é…ç½®è°ƒæ•´
+# qbittorrent ÅäÖÃµ÷Õû
 function adjust_qbittorrent_config() {
-    echo -n "è°ƒæ•´ qbittorrent é…ç½® ... "
+    echo -n "µ÷Õû qbittorrent ÅäÖÃ ... "
     (
         cd $TGT_ROOT
         if [ -f "./etc/config/qbittorrent" ];then
             sed -e 's/\/opt/\/etc/' -i ./etc/config/qbittorrent
-            echo "å®Œæˆ"
+            echo "Íê³É"
         else
-            echo "æœªå‘ç° qbittorrent é…ç½®æ–‡ä»¶, æ”¾å¼ƒè°ƒæ•´"
+            echo "Î´·¢ÏÖ qbittorrent ÅäÖÃÎÄ¼ş, ·ÅÆúµ÷Õû"
         fi
     )
 }
 
-# openssl é…ç½®è°ƒæ•´
+# openssl ÅäÖÃµ÷Õû
 function adjust_openssl_config() {
-    echo "è°ƒæ•´ openssl é…ç½® ... "
+    echo "µ÷Õû openssl ÅäÖÃ ... "
     (
         cd $TGT_ROOT
         #if [ -f $SSL_CNF_PATCH ];then
              #if patch -p1 < $SSL_CNF_PATCH;then
-                 #echo "å®Œæˆ"
+                 #echo "Íê³É"
              #else
-                 #echo "å¤±è´¥ï¼è¯·æ£€æŸ¥ $SSL_CNF_PATCH "
+                 #echo "Ê§°Ü£¡Çë¼ì²é $SSL_CNF_PATCH "
              #fi 
         #else
-            #echo "æœªå‘ç° openssl é…ç½®æ–‡ä»¶ï¼Œæ”¾å¼ƒè°ƒæ•´"
+            #echo "Î´·¢ÏÖ openssl ÅäÖÃÎÄ¼ş£¬·ÅÆúµ÷Õû"
         #fi
 
-	# devcrypto engine ä¼šå¯¼è‡´ openssh æ— æ³•å·¥ä½œï¼Œç¦ç”¨ (å»ºè®®ç¼–è¯‘æ—¶ä¸è¦é€‰æ‹©æ­¤engine)
+	# devcrypto engine »áµ¼ÖÂ openssh ÎŞ·¨¹¤×÷£¬½ûÓÃ (½¨Òé±àÒëÊ±²»ÒªÑ¡Ôñ´Ëengine)
 	if [ -f "./etc/ssl/engines.cnf.d/devcrypto.cnf" ];then
-             echo -n "ç¦ç”¨ devcrypto å¼•æ“ ... "
+             echo -n "½ûÓÃ devcrypto ÒıÇæ ... "
 	     rm -f ./etc/ssl/engines.cnf.d/devcrypto.cnf
-	     # æ¸…ç©º etc/config/openssl
+	     # Çå¿Õ etc/config/openssl
 	     > ./etc/config/openssl
-             echo "å®Œæˆ"
+             echo "Íê³É"
         fi
 
-	# å¦‚æœå‘ç° afalg engine
+	# Èç¹û·¢ÏÖ afalg engine
 	if [ -f "./usr/lib/engines-1.1/afalg.so" ] && [ -d "./etc/ssl/engines.cnf.d" ];then
-             echo -n "æ·»åŠ  afalg å¼•æ“ ... "
+             echo -n "Ìí¼Ó afalg ÒıÇæ ... "
              grep "engine 'afalg'" "./etc/config/openssl" || cat >> ./etc/config/openssl <<EOF
 
 config engine 'afalg'
@@ -1293,21 +1289,21 @@ default_algorithms = ALL
 # for example, does this, and you may not be able to login.
 #DIGESTS = NONE
 EOF
-             echo "å®Œæˆ"
+             echo "Íê³É"
         fi
     )
-    echo "è°ƒæ•´å®Œæˆ"
+    echo "µ÷ÕûÍê³É"
     echo
 }
 
-# docker é…ç½®è°ƒæ•´
+# docker ÅäÖÃµ÷Õû
 function adjust_docker_config() {
-    echo "è°ƒæ•´ docker server é…ç½® ... "
+    echo "µ÷Õû docker server ÅäÖÃ ... "
     (
         cd $TGT_ROOT
         [ -n "$DOCKER_README" ] && [ -f ./www/DockerReadme.pdf ] && [ -f ${DOCKER_README} ] && cp -fv ${DOCKER_README} ./www/DockerReadme.pdf
         if [ -f ./etc/init.d/dockerd ];then
-            echo "å‘ç° dockerd æœåŠ¡ï¼Œæ­£åœ¨è°ƒæ•´ ... "
+            echo "·¢ÏÖ dockerd ·şÎñ£¬ÕıÔÚµ÷Õû ... "
             [ -n "$DOCKERD_PATCH" ] && [ -f "$DOCKERD_PATCH" ] && [ ! -f ./etc/init.d/dockerman ] && patch -p1 < $DOCKERD_PATCH
 
             if [ -f "./etc/init.d/dockerman" ] ;then
@@ -1320,55 +1316,55 @@ EOF
                 sed -e '/uci -q set dockerd.globals.auto_start="0"/d' -i ./etc/uci-defaults/luci-app-dockerman 
             fi
 
-	    # ç”±first_run.shè´Ÿè´£é‡æ–°å¼€å¯dockerdæœåŠ¡
-            echo "é»˜è®¤å…³é—­ dockerd æœåŠ¡ ... "
+	    # ÓÉfirst_run.sh¸ºÔğÖØĞÂ¿ªÆôdockerd·şÎñ
+            echo "Ä¬ÈÏ¹Ø±Õ dockerd ·şÎñ ... "
             rm -f ./etc/rc.d/S??dockerd ./etc/rc.d/S??dockerman
-            echo "å®Œæˆ"
+            echo "Íê³É"
         else
-            echo "æœªå‘ç° dockerd æœåŠ¡ï¼Œæ”¾å¼ƒè°ƒæ•´"
+            echo "Î´·¢ÏÖ dockerd ·şÎñ£¬·ÅÆúµ÷Õû"
         fi
     )
     echo
 }
 
-# mosdns é…ç½®è°ƒæ•´
+# mosdns ÅäÖÃµ÷Õû
 function adjust_mosdns_config() {
     (
     	if [ -f ./etc/config/mosdns ];then
-            echo -n "å‘ç°mosdnsé…ç½®ï¼Œæ­£åœ¨è°ƒæ•´ ... "
+            echo -n "·¢ÏÖmosdnsÅäÖÃ£¬ÕıÔÚµ÷Õû ... "
 	    sed -e "s/option enabled '1'/option enabled '0'/" -i ./etc/config/mosdns
 	    sed -e "s/option redirect '1'/option redirect '0'/" -i ./etc/config/mosdns
 	    sed -e "s/option autoconf '1'/option autoconf '0'/" -i ./etc/config/mosdns
-	    echo "å®Œæˆ"
+	    echo "Íê³É"
         fi
     )
 }
 
-# ç”¨ xray ä»£æ›¿ v2ray (å¦‚æœv2rayä¸å­˜åœ¨)
+# ÓÃ xray ´úÌæ v2ray (Èç¹ûv2ray²»´æÔÚ)
 function use_xrayplug_replace_v2rayplug() {
     (
         cd $TGT_ROOT
         if [ -f usr/bin/xray ] && [ ! -f usr/bin/v2ray ];then
-            echo -n "ç”¨ xray ä»£æ›¿ v2ray ... "
+            echo -n "ÓÃ xray ´úÌæ v2ray ... "
             cd usr/bin && rm -f v2ray && ln -s xray v2ray
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
 
         cd $TGT_ROOT
         if [ -f usr/bin/xray-plugin ] && [ ! -f usr/bin/v2ray-plugin ];then
-            echo -n "ç”¨ xray-plugin ä»£æ›¿ v2ray-plugin ... "
+            echo -n "ÓÃ xray-plugin ´úÌæ v2ray-plugin ... "
             cd usr/bin && rm -f v2ray-plugin && ln -s xray-plugin v2ray-plugin
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
     )
 }
 
-# é…ç½® first run ç¨‹åº
+# ÅäÖÃ first run ³ÌĞò
 function config_first_run() {
-    echo "åˆ›å»º [åˆæ¬¡ä½¿ç”¨] åº”ç”¨ç¯å¢ƒ ... "
+    echo "´´½¨ [³õ´ÎÊ¹ÓÃ] Ó¦ÓÃ»·¾³ ... "
     (
          cd $TGT_ROOT
-         # First run, ç¬¬ä¸€æ¬¡å¯åŠ¨æ—¶è‡ªåŠ¨åˆ›å»ºæ–°åˆ†åŒºåŠæ ¼å¼åŒ–
+         # First run, µÚÒ»´ÎÆô¶¯Ê±×Ô¶¯´´½¨ĞÂ·ÖÇø¼°¸ñÊ½»¯
          if [ -n "$FIRSTRUN_SCRIPT" ] && [ -f "$FIRSTRUN_SCRIPT" ];then
               cp -v "$FIRSTRUN_SCRIPT" ./etc/first_run.sh && \
                   sed -e "s/MYSELF=\$0/MYSELF=\"\/etc\/first_run.sh\"/" -i ./etc/first_run.sh && \
@@ -1376,183 +1372,183 @@ function config_first_run() {
               cp -v "./etc/rc.local" "./etc/rc.local.orig"
               echo -e "${SKIP_MB}\t${BOOT_MB}\t${ROOTFS_MB}" > ./etc/part_size
               sed -e "/exit/i\/etc/first_run.sh >/root/first_run.log 2>&1" -i etc/rc.local
-              echo "å®Œæˆ"
+              echo "Íê³É"
           else
-              echo "æœªå‘ç°ç›¸å…³ä¾èµ–ï¼Œè·³è¿‡é…ç½®"
+              echo "Î´·¢ÏÖÏà¹ØÒÀÀµ£¬Ìø¹ıÅäÖÃ"
           fi
 
     )
     echo
 }
 
-# è°ƒæ•´ å†…æ ¸ ç¯å¢ƒ
+# µ÷Õû ÄÚºË »·¾³
 function adjust_kernel_env() {
-    echo "è°ƒæ•´å†…æ ¸ã€ç¡¬ä»¶é©±åŠ¨ç­‰ç›¸å…³ç¯å¢ƒ ..."
+    echo "µ÷ÕûÄÚºË¡¢Ó²¼şÇı¶¯µÈÏà¹Ø»·¾³ ..."
     echo "==============================================================================="
     (
         cd $TGT_ROOT
         local ps="${PLATFORM}_${SOC}"
         if [ -f etc/config/cpufreq ];then
-            echo "è®¾ç½® schedutil ä¸ºé»˜è®¤è°ƒåº¦å™¨"
+            echo "ÉèÖÃ schedutil ÎªÄ¬ÈÏµ÷¶ÈÆ÷"
             sed -e "s/ondemand/schedutil/" -i etc/config/cpufreq
         fi
 
         if [ -n "$SYSCTL_CUSTOM_CONF" ] && [ -f ${SYSCTL_CUSTOM_CONF} ];then
-            echo "å¯ç”¨è‡ªå®šä¹‰çš„å†…æ ¸ä¼˜åŒ–å‚æ•° ... "
+            echo "ÆôÓÃ×Ô¶¨ÒåµÄÄÚºËÓÅ»¯²ÎÊı ... "
             cp -v ${SYSCTL_CUSTOM_CONF} ./etc/sysctl.d/
         fi
 
         if [ -n "${KMOD_BLACKLIST}" ] && [ -f "${KMOD_BLACKLIST}" ];then
-            echo -n "ç¦ç”¨é»‘åå•ä¸­çš„å†…æ ¸æ¨¡å— ... "
+            echo -n "½ûÓÃºÚÃûµ¥ÖĞµÄÄÚºËÄ£¿é ... "
             [ -d ./etc/modules.d.remove ] || mkdir -p ./etc/modules.d.remove
             local mod_blacklist=$(cat ${KMOD_BLACKLIST})
             for mod in $mod_blacklist ;do
                  mv -f ./etc/modules.d/${mod} ./etc/modules.d.remove/ 2>/dev/null
             done
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi    
 
         case $ps in 
             allwinner_h6|rockchip_rk3328) 
-                echo -n "å½“å‰æœºå‹å¹¶æœªå†…ç½® broadcom æ— çº¿æ¨¡å—, ç¦ç”¨ brcmfmac é©±åŠ¨ ... "
+                echo -n "µ±Ç°»úĞÍ²¢Î´ÄÚÖÃ broadcom ÎŞÏßÄ£¿é, ½ûÓÃ brcmfmac Çı¶¯ ... "
                 mv -f ./etc/modules.d/brcm* ./etc/modules.d.remove/ 2>/dev/null
-                echo "å®Œæˆ"
+                echo "Íê³É"
                 ;;
             amlogic_*) 
                 if [ $K510 -eq 1 ];then
-                    # é«˜ç‰ˆæœ¬å†…æ ¸ä¸‹ï¼Œå¦‚æœENABLE_WIFI_K510 = 0 åˆ™ç¦ç”¨wifi
+                    # ¸ß°æ±¾ÄÚºËÏÂ£¬Èç¹ûENABLE_WIFI_K510 = 0 Ôò½ûÓÃwifi
                     if [ $ENABLE_WIFI_K510 -eq 0 ];then
-                         echo "ç¦ç”¨äº† brcmfmac å†…ç½®æ— çº¿ç½‘å¡é©±åŠ¨, å¦‚éœ€å¼€å¯, è¯·è®¾ç½® ENABLE_WIFI_K510=1 å¹¶é‡æ–°æ‰“åŒ…"
+                         echo "½ûÓÃÁË brcmfmac ÄÚÖÃÎŞÏßÍø¿¨Çı¶¯, ÈçĞè¿ªÆô, ÇëÉèÖÃ ENABLE_WIFI_K510=1 ²¢ÖØĞÂ´ò°ü"
                          mv -f ./etc/modules.d/brcm*  ./etc/modules.d.remove/ 2>/dev/null
                     else
                          echo "brcmfmac" > ./etc/modules.d/brcmfmac
                          echo "brcmutil" > ./etc/modules.d/brcmutil
-                         echo "å·²å¯ç”¨ brcmfmac é©±åŠ¨ï¼Œå¦‚æœæœºå†…æœ‰ broadcom æ¨¡å—çš„è¯ï¼Œå°±å¯ä»¥å¼€å¯wifiåŠŸèƒ½" 
+                         echo "ÒÑÆôÓÃ brcmfmac Çı¶¯£¬Èç¹û»úÄÚÓĞ broadcom Ä£¿éµÄ»°£¬¾Í¿ÉÒÔ¿ªÆôwifi¹¦ÄÜ" 
                     fi
                 else
-                    # ä½ç‰ˆæœ¬å†…æ ¸ä¸‹ï¼Œå¦‚æœENABLE_WIFI_K504 = 0 åˆ™ç¦ç”¨wifi
+                    # µÍ°æ±¾ÄÚºËÏÂ£¬Èç¹ûENABLE_WIFI_K504 = 0 Ôò½ûÓÃwifi
                     if [ $ENABLE_WIFI_K504 -eq 0 ];then
-                        echo "ç¦ç”¨äº† brcmfmac å†…ç½®æ— çº¿ç½‘å¡é©±åŠ¨, å¦‚éœ€å¼€å¯, è¯·è®¾ç½® ENABLE_WIFI_K504=1 å¹¶é‡æ–°æ‰“åŒ…"
+                        echo "½ûÓÃÁË brcmfmac ÄÚÖÃÎŞÏßÍø¿¨Çı¶¯, ÈçĞè¿ªÆô, ÇëÉèÖÃ ENABLE_WIFI_K504=1 ²¢ÖØĞÂ´ò°ü"
                         mv -f ./etc/modules.d/brcm*  ./etc/modules.d.remove/ 2>/dev/null
                     else
                         echo "brcmfmac" > ./etc/modules.d/brcmfmac
                         echo "brcmutil" > ./etc/modules.d/brcmutil
-                        echo "å·²å¯ç”¨ brcmfmac é©±åŠ¨ï¼Œå¦‚æœæœºå†…æœ‰ broadcom æ¨¡å—çš„è¯ï¼Œå°±å¯ä»¥å¼€å¯wifiåŠŸèƒ½" 
+                        echo "ÒÑÆôÓÃ brcmfmac Çı¶¯£¬Èç¹û»úÄÚÓĞ broadcom Ä£¿éµÄ»°£¬¾Í¿ÉÒÔ¿ªÆôwifi¹¦ÄÜ" 
                     fi
                 fi
                 ;;
-            *)  echo "è·³è¿‡"
+            *)  echo "Ìø¹ı"
                 ;;
         esac 
              
-        echo -n "å¯ç”¨ USB AX88179 ç½‘å¡é©±åŠ¨ ... "
+        echo -n "ÆôÓÃ USB AX88179 Íø¿¨Çı¶¯ ... "
         [ -f ./etc/modules.d/usb-net-asix-ax88179 ] || echo "ax88179_178a" > ./etc/modules.d/usb-net-asix-ax88179
-        echo "å®Œæˆ"
+        echo "Íê³É"
 
-        echo -n "å¯ç”¨ USB RTL8152/8153/8156 ç½‘å¡é©±åŠ¨ ... "
+        echo -n "ÆôÓÃ USB RTL8152/8153/8156 Íø¿¨Çı¶¯ ... "
         [ -f ./etc/modules.d/usb-net-rtl8152 ] || echo "r8152" > ./etc/modules.d/usb-net-rtl8152
-        echo "å®Œæˆ"
+        echo "Íê³É"
 
-        echo -n "å¯ç”¨ USB Realtek RTL8188EU æ— çº¿ç½‘å¡é©±åŠ¨ ... "
+        echo -n "ÆôÓÃ USB Realtek RTL8188EU ÎŞÏßÍø¿¨Çı¶¯ ... "
         echo "r8188eu" > ./etc/modules.d/rtl8188eu
-        echo "å®Œæˆ"
-        echo "  *** æ˜¯å¦å¯ç”¨è¯·è‡ªè¡Œæµ‹è¯•"
+        echo "Íê³É"
+        echo "  *** ÊÇ·ñ¿ÉÓÃÇë×ÔĞĞ²âÊÔ"
 
-        echo -n "å¯ç”¨ USB Ralink æ— çº¿ç½‘å¡é©±åŠ¨  ... "
+        echo -n "ÆôÓÃ USB Ralink ÎŞÏßÍø¿¨Çı¶¯  ... "
         echo "rt2500usb" > ./etc/modules.d/rt2500-usb
         echo "rt2800usb" > ./etc/modules.d/rt2800-usb
         echo "rt2x00usb" > ./etc/modules.d/rt2x00-usb
-        echo "å®Œæˆ"
-        echo "  *** å¦‚æœæœ‰ Ralink rt2xxx/rt3xxx/rt5xxx ç³»åˆ—USBæ— çº¿ç½‘å¡çš„è¯ï¼Œæ’ä¸ŠåŸºæœ¬èƒ½ç”¨"
+        echo "Íê³É"
+        echo "  *** Èç¹ûÓĞ Ralink rt2xxx/rt3xxx/rt5xxx ÏµÁĞUSBÎŞÏßÍø¿¨µÄ»°£¬²åÉÏ»ù±¾ÄÜÓÃ"
 
-        echo -n "å¯ç”¨ USB Mediatek æ— çº¿ç½‘å¡é©±åŠ¨  ... "
+        echo -n "ÆôÓÃ USB Mediatek ÎŞÏßÍø¿¨Çı¶¯  ... "
         echo "mt7601u" > ./etc/modules.d/mt7601u
         echo "mt7663u" > ./etc/modules.d/mt7663u
         echo "mt76x0u" > ./etc/modules.d/mt76x0u
         echo "mt76x2u" > ./etc/modules.d/mt76x2u
-        echo "å®Œæˆ"
-        echo "  *** å¦‚æœæœ‰ Mediatek mt7601u/mt7610u/mt7612u/mt7663u ç³»åˆ—USBæ— çº¿ç½‘å¡çš„è¯ï¼Œæ’ä¸ŠåŸºæœ¬èƒ½ç”¨"
+        echo "Íê³É"
+        echo "  *** Èç¹ûÓĞ Mediatek mt7601u/mt7610u/mt7612u/mt7663u ÏµÁĞUSBÎŞÏßÍø¿¨µÄ»°£¬²åÉÏ»ù±¾ÄÜÓÃ"
 
-        echo -n "å¯ç”¨çœ‹é—¨ç‹—é©±åŠ¨ ... "
+        echo -n "ÆôÓÃ¿´ÃÅ¹·Çı¶¯ ... "
         case $PLATFORM in 
             allwinner) echo "sunxi_wdt" > ./etc/modules.d/watchdog
-                       echo "å®Œæˆ"
+                       echo "Íê³É"
                        ;;
              rockchip) echo "dw_wdt" > ./etc/modules.d/watchdog
-                       echo "å®Œæˆ"
+                       echo "Íê³É"
                        ;;
               amlogic) echo meson_gxbb_wdt > ./etc/modules.d/watchdog
-                       echo "å®Œæˆ"
+                       echo "Íê³É"
                        ;;
-                    *) echo "è·³è¿‡";;
+                    *) echo "Ìø¹ı";;
         esac 
 
         if [ -n "${SND_MOD}" ] && [ -f ./etc/config/shairport-sync ] && [ -f ${SND_MOD} ];then
-            echo -n "å¯ç”¨å£°å¡é©±åŠ¨ ... "
+            echo -n "ÆôÓÃÉù¿¨Çı¶¯ ... "
             cp ${SND_MOD} ./etc/modules.d/
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
 
         if [ "$PLATFORM" == "amlogic" ];then
-            echo -n "å¯ç”¨ GPU é©±åŠ¨ ... "
+            echo -n "ÆôÓÃ GPU Çı¶¯ ... "
             echo "panfrost" > ./etc/modules.d/panfrost
-            echo "å®Œæˆ"
-            echo -n "å¯ç”¨ PWM é©±åŠ¨ ... "
+            echo "Íê³É"
+            echo -n "ÆôÓÃ PWM Çı¶¯ ... "
             echo "pwm_meson" > ./etc/modules.d/pwm_meson
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
     )
     echo "==============================================================================="
-    echo "å®Œæˆ"
+    echo "Íê³É"
     echo
 }
 
-# å¤åˆ¶ u-boot åˆ°æ–‡ä»¶ç³»ç»Ÿ
+# ¸´ÖÆ u-boot µ½ÎÄ¼şÏµÍ³
 function copy_uboot_to_fs() {
     (
         cd $TGT_ROOT
         if [ "$BOARD" == "vplus" ] && [ -n "${UBOOT_BIN}" ] && [ -f ${UBOOT_BIN} ];then
-            echo "æ£€æµ‹åˆ° vplus æœºå‹ï¼Œæ­£åœ¨æŠŠ u-boot ç›¸å…³æ–‡ä»¶å†™å…¥åˆ° /lib/u-bootç›®å½•ä¸­å¤‡ç”¨ ... "
+            echo "¼ì²âµ½ vplus »úĞÍ£¬ÕıÔÚ°Ñ u-boot Ïà¹ØÎÄ¼şĞ´Èëµ½ /lib/u-bootÄ¿Â¼ÖĞ±¸ÓÃ ... "
             mkdir -p ./lib/u-boot
             cp -v ${UBOOT_BIN} ./lib/u-boot/
             cp -v ${WRITE_UBOOT_SCRIPT} ./lib/u-boot/
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
 
         if [ "$PLATFORM" == "amlogic" ] && [ -n "$FIP_HOME" ] && [ -d "${FIP_HOME}" ];then
-            echo "æ£€æµ‹åˆ° amlogic å¹³å°ï¼Œæ­£åœ¨æŠŠä¸»çº¿ u-boot ç›¸å…³æ–‡ä»¶å†™å…¥åˆ° /lib/u-boot ç›®å½•ä¸­å¤‡ç”¨ ... "
+            echo "¼ì²âµ½ amlogic Æ½Ì¨£¬ÕıÔÚ°ÑÖ÷Ïß u-boot Ïà¹ØÎÄ¼şĞ´Èëµ½ /lib/u-boot Ä¿Â¼ÖĞ±¸ÓÃ ... "
             mkdir -p ./lib/u-boot
             cp -v "${FIP_HOME}"/../*.sh lib/u-boot/
             cp -v "${FIP_HOME}"/*.sd.bin lib/u-boot/
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
 
         if [ "$PLATFORM" == "amlogic" ] && [ -n "$BTLD_BIN" ] && [ -f "${BTLD_BIN}" ];then
-            echo "æ£€æµ‹åˆ° amlogic å¹³å°ï¼Œæ­£åœ¨æŠŠå®‰å“ u-boot ç›¸å…³æ–‡ä»¶å†™å…¥åˆ° /lib/u-boot ç›®å½•ä¸­å¤‡ç”¨ ... "
+            echo "¼ì²âµ½ amlogic Æ½Ì¨£¬ÕıÔÚ°Ñ°²×¿ u-boot Ïà¹ØÎÄ¼şĞ´Èëµ½ /lib/u-boot Ä¿Â¼ÖĞ±¸ÓÃ ... "
             mkdir -p ./lib/u-boot
             cp -v "$BTLD_BIN" lib/u-boot/
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
     )
     echo
 }
 
-# å†™å…¥ u-boot åˆ°ç£ç›˜é•œåƒ
+# Ğ´Èë u-boot µ½´ÅÅÌ¾µÏñ
 function write_uboot_to_disk() {
     (
         if [ "$PLATFORM" == "allwinner" ] && [ -n "$UBOOT_BIN" ] && [ -f "$UBOOT_BIN" ];then
-            echo "å†™å…¥ bootloader ..."
+            echo "Ğ´Èë bootloader ..."
 
             echo "dd if=${UBOOT_BIN} of=${TGT_DEV} conv=fsync,notrunc bs=1024 seek=8"
 
             dd if="${UBOOT_BIN}" of="${TGT_DEV}" conv=fsync,notrunc bs=1024 seek=8
 
             sync
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
 
         if [ "$PLATFORM" == "rockchip" ] && [ -n "$BOOTLOADER_IMG" ] && [ -f "$BOOTLOADER_IMG" ];then
-            echo "å†™å…¥ bootloader ..."
+            echo "Ğ´Èë bootloader ..."
             echo "dd if=${BOOTLOADER_IMG} of=${TGT_DEV} conv=fsync,notrunc bs=1 count=442"
             echo "dd if=${BOOTLOADER_IMG} of=${TGT_DEV} conv=fsync,notrunc bs=512 skip=1 seek=1"
 
@@ -1560,11 +1556,11 @@ function write_uboot_to_disk() {
             dd if=${BOOTLOADER_IMG} of=${TGT_DEV} conv=fsync,notrunc bs=512 skip=1 seek=1
 
             sync
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
 
         if [ "$PLATFORM" == "amlogic" ] && [ -n "$UBOOT_WITH_FIP" ] && [ -f "$UBOOT_WITH_FIP" ];then
-            echo "å†™å…¥ bootloader ..."
+            echo "Ğ´Èë bootloader ..."
             echo "dd if=${UBOOT_WITH_FIP}  of=${TGT_DEV} conv=fsync,notrunc bs=512 skip=1 seek=1"
             echo "dd if=${UBOOT_WITH_FIP}  of=${TGT_DEV} conv=fsync,notrunc bs=1 count=444"
 
@@ -1572,13 +1568,13 @@ function write_uboot_to_disk() {
             dd if=${UBOOT_WITH_FIP}  of=${TGT_DEV} conv=fsync,notrunc bs=1 count=444
 
             sync
-            echo "å®Œæˆ"
+            echo "Íê³É"
         fi
     )
     echo
 }
 
-# å¯¹btrfsæ ¼å¼çš„ rootfs åˆ›å»º etc å¿«ç…§
+# ¶Ôbtrfs¸ñÊ½µÄ rootfs ´´½¨ etc ¿ìÕÕ
 function create_snapshot() {
     local snapshot_name=$1
     fstype=$(lsblk -o MOUNTPOINT,FSTYPE ${TGT_DEV} | grep "${TGT_ROOT}" | gawk '{print $2}')
@@ -1587,19 +1583,19 @@ function create_snapshot() {
     fi
     (
         cd $TGT_ROOT
-        echo "åˆ›å»ºåˆå§‹å¿«ç…§: /etc -> /.snapshots/${snapshot_name}"
+        echo "´´½¨³õÊ¼¿ìÕÕ: /etc -> /.snapshots/${snapshot_name}"
         mkdir -p .snapshots && \
         btrfs subvolume snapshot -r etc .snapshots/${snapshot_name}
-        echo "å®Œæˆ"
+        echo "Íê³É"
         echo
     )
 }
 
-# æ¸…ç†ç¯å¢ƒ
+# ÇåÀí»·¾³
 function clean_work_env() {
-    echo -n "æ¸…ç†ç¯å¢ƒ ... "
+    echo -n "ÇåÀí»·¾³ ... "
     detach_loopdev
     sync
-    echo "å®Œæˆ"
+    echo "Íê³É"
     echo
 }

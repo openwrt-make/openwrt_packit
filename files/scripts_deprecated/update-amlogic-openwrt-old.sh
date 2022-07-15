@@ -2,42 +2,42 @@
 
 # check cmd param
 if [ "$1" == "" ];then
-    echo "ç”¨æ³•: $0 xxx.img"
+    echo "ÓÃ·¨: $0 xxx.img"
     exit 1
 fi
 
-# æ£€æŸ¥é•œåƒæ–‡ä»¶æ˜¯å¦å­˜åœ¨
+# ¼ì²é¾µÏñÎÄ¼şÊÇ·ñ´æÔÚ
 IMG_NAME=$1
 if [ ! -f "$IMG_NAME" ];then
-    echo "$IMG_NAME ä¸å­˜åœ¨!"
+    echo "$IMG_NAME ²»´æÔÚ!"
     exit 1
 fi
 
-# æŸ¥æ‰¾å½“å‰çš„ /boot åˆ†åŒºä¿¡æ¯
+# ²éÕÒµ±Ç°µÄ /boot ·ÖÇøĞÅÏ¢
 DEPENDS="lsblk uuidgen grep awk mkfs.fat mkfs.btrfs perl"
 for dep in ${DEPENDS};do
     which $dep
     if [ $? -ne 0 ];then
-        echo "ä¾èµ–çš„å‘½ä»¤: $dep ä¸å­˜åœ¨ï¼"
+        echo "ÒÀÀµµÄÃüÁî: $dep ²»´æÔÚ£¡"
 	exit 1
     fi
 done
 
 BOOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | awk '$3~/^part$/ && $5 ~ /^\/boot$/ {print $0}')
 if [ "${BOOT_PART_MSG}" == "" ];then
-    echo "Boot åˆ†åŒºä¸å­˜åœ¨ï¼Œæˆ–æ˜¯æ²¡æœ‰æ­£ç¡®æŒ‚è½½, å› æ­¤æ— æ³•ç»§ç»­å‡çº§!"
+    echo "Boot ·ÖÇø²»´æÔÚ£¬»òÊÇÃ»ÓĞÕıÈ·¹ÒÔØ, Òò´ËÎŞ·¨¼ÌĞøÉı¼¶!"
     exit 1
 fi
 
-# è·å¾—å½“å‰ä½¿ç”¨çš„ dtb æ–‡ä»¶å
+# »ñµÃµ±Ç°Ê¹ÓÃµÄ dtb ÎÄ¼şÃû
 cp /boot/uEnv.txt /tmp/
 source /boot/uEnv.txt 2>/dev/null
 CUR_FDTFILE=${FDT}
 if [ "${CUR_FDTFILE}" == "" ];then
-    echo "è­¦å‘Š: æœªæŸ¥åˆ°å½“å‰ä½¿ç”¨çš„ dtb æ–‡ä»¶åï¼Œå¯èƒ½å½±å“åé¢çš„å‡çº§(ä¹Ÿå¯èƒ½ä¸å½±å“)"
+    echo "¾¯¸æ: Î´²éµ½µ±Ç°Ê¹ÓÃµÄ dtb ÎÄ¼şÃû£¬¿ÉÄÜÓ°ÏìºóÃæµÄÉı¼¶(Ò²¿ÉÄÜ²»Ó°Ïì)"
 fi
 
-# è·å¾—å½“å‰å›ºä»¶çš„å‚æ•°
+# »ñµÃµ±Ç°¹Ì¼şµÄ²ÎÊı
 CUR_SOC=""
 CUR_BOARD=""
 if [ -f /etc/flippy-openwrt-release ];then
@@ -47,7 +47,7 @@ if [ -f /etc/flippy-openwrt-release ];then
 fi
 
 CUR_KV=$(uname -r)
-# åˆ¤æ–­å†…æ ¸ç‰ˆæœ¬æ˜¯å¦ >= 5.10
+# ÅĞ¶ÏÄÚºË°æ±¾ÊÇ·ñ >= 5.10
 CK_VER=$(echo "$CUR_KV" | cut -d '.' -f1)
 CK_MAJ=$(echo "$CUR_KV" | cut -d '.' -f2)
 
@@ -63,9 +63,9 @@ else
     CUR_K510=0
 fi
 
-# å¤‡ä»½æ ‡å¿—
+# ±¸·İ±êÖ¾
 BR_FLAG=1
-echo -ne "ä½ æƒ³è¦å¤‡ä»½æ—§ç‰ˆæœ¬çš„é…ç½®ï¼Œå¹¶å°†å…¶è¿˜åŸåˆ°å‡çº§åçš„ç³»ç»Ÿä¸­å—? y/n [y]\b\b"
+echo -ne "ÄãÏëÒª±¸·İ¾É°æ±¾µÄÅäÖÃ£¬²¢½«Æä»¹Ô­µ½Éı¼¶ºóµÄÏµÍ³ÖĞÂğ? y/n [y]\b\b"
 read yn
 case $yn in
      n*|N*) BR_FLAG=0;;
@@ -75,20 +75,20 @@ BOOT_NAME=$(echo $BOOT_PART_MSG | awk '{print $1}')
 BOOT_PATH=$(echo $BOOT_PART_MSG | awk '{print $2}')
 BOOT_UUID=$(echo $BOOT_PART_MSG | awk '{print $4}')
 
-# emmcè®¾å¤‡å…·æœ‰  /dev/mmcblk?p?boot0ã€/dev/mmcblk?p?boot1ç­‰2ä¸ªç‰¹æ®Šè®¾å¤‡, tfå¡æˆ–uç›˜åˆ™ä¸å­˜åœ¨è¯¥è®¾å¤‡
+# emmcÉè±¸¾ßÓĞ  /dev/mmcblk?p?boot0¡¢/dev/mmcblk?p?boot1µÈ2¸öÌØÊâÉè±¸, tf¿¨»òuÅÌÔò²»´æÔÚ¸ÃÉè±¸
 MMCBOOT0=${BOOT_PATH%%p*}boot0
 if [ -b "${MMCBOOT0}" ];then
-    CUR_BOOT_FROM_EMMC=1        # BOOTæ˜¯EMMC 
-    echo "å½“å‰çš„ boot åˆ†åŒºåœ¨ EMMC é‡Œ"
+    CUR_BOOT_FROM_EMMC=1        # BOOTÊÇEMMC 
+    echo "µ±Ç°µÄ boot ·ÖÇøÔÚ EMMC Àï"
     cp /boot/u-boot.ext  /tmp/ 2>/dev/null
     cp /boot/u-boot.emmc /tmp/ 2>/dev/null
     BOOT_LABEL="EMMC_BOOT"
 else
-    CUR_BOOT_FROM_EMMC=0        # BOOT ä¸æ˜¯ EMMC
+    CUR_BOOT_FROM_EMMC=0        # BOOT ²»ÊÇ EMMC
     if echo "${BOOT_PATH}" | grep "mmcblk" > /dev/null;then
-        echo "å½“å‰çš„ boot åˆ†åŒºåœ¨ TFå¡ é‡Œ"
+        echo "µ±Ç°µÄ boot ·ÖÇøÔÚ TF¿¨ Àï"
     else
-        echo "å½“å‰çš„ boot åˆ†åŒºåœ¨ Uç›˜ é‡Œ"
+        echo "µ±Ç°µÄ boot ·ÖÇøÔÚ UÅÌ Àï"
     fi
     cp /boot/u-boot.ext  /tmp/ 2>/dev/null
     cp /boot/u-boot.emmc /tmp/ 2>/dev/null
@@ -113,7 +113,7 @@ case $ROOT_NAME in
   mmcblk2p3) NEW_ROOT_NAME=mmcblk2p2
              NEW_ROOT_LABEL=EMMC_ROOTFS1
              ;;
-          *) echo "ROOTFS åˆ†åŒºä½ç½®ä¸æ­£ç¡®, å› æ­¤æ— æ³•ç»§ç»­å‡çº§!"
+          *) echo "ROOTFS ·ÖÇøÎ»ÖÃ²»ÕıÈ·, Òò´ËÎŞ·¨¼ÌĞøÉı¼¶!"
              exit 1
              ;;
 esac
@@ -121,7 +121,7 @@ esac
 # find new root partition
 NEW_ROOT_PART_MSG=$(lsblk -l -o NAME,PATH,TYPE,UUID,MOUNTPOINT | grep "${NEW_ROOT_NAME}" | awk '$3 ~ /^part$/ && $5 !~ /^\/$/ && $5 !~ /^\/boot$/ {print $0}')
 if [ "${NEW_ROOT_PART_MSG}" == "" ];then
-    echo "æ–°çš„ ROOTFS åˆ†åŒºä¸å­˜åœ¨, å› æ­¤æ— æ³•ç»§ç»­å‡çº§!"
+    echo "ĞÂµÄ ROOTFS ·ÖÇø²»´æÔÚ, Òò´ËÎŞ·¨¼ÌĞøÉı¼¶!"
     exit 1
 fi
 NEW_ROOT_NAME=$(echo $NEW_ROOT_PART_MSG | awk '{print $1}')
@@ -134,11 +134,11 @@ losetup -f -P $IMG_NAME
 if [ $? -eq 0 ];then
     LOOP_DEV=$(losetup | grep "$IMG_NAME" | awk '{print $1}')
     if [ "$LOOP_DEV" == "" ];then
-        echo "loop è®¾å¤‡æœªæ‰¾åˆ°!"
+        echo "loop Éè±¸Î´ÕÒµ½!"
         exit 1
     fi
 else
-    echo "losetup $IMG_FILE å¤±è´¥!"
+    echo "losetup $IMG_FILE Ê§°Ü!"
     exit 1
 fi
 
@@ -155,15 +155,15 @@ echo
 MOUNTED_DEVS=$(lsblk -l -o NAME,PATH,MOUNTPOINT | grep "$LOOP_DEV" | awk '$3 !~ /^$/ {print $2}')
 for dev in $MOUNTED_DEVS;do
     while : ;do
-        echo -n "å¸è½½ $dev ... "
+        echo -n "Ğ¶ÔØ $dev ... "
         umount -f $dev
         sleep 1
         mnt=$(lsblk -l -o NAME,PATH,MOUNTPOINT | grep "$dev" | awk '$3 !~ /^$/ {print $2}')
         if [ "$mnt" == "" ];then
-            echo "æˆåŠŸ"
+            echo "³É¹¦"
             break
         else 
-            echo "é‡è¯• ..."
+            echo "ÖØÊÔ ..."
         fi
     done
 done
@@ -173,28 +173,28 @@ WORK_DIR=$PWD
 P1=${WORK_DIR}/boot
 P2=${WORK_DIR}/root
 mkdir -p $P1 $P2
-echo -n "æŒ‚è½½ ${LOOP_DEV}p1 -> ${P1} ... "
+echo -n "¹ÒÔØ ${LOOP_DEV}p1 -> ${P1} ... "
 mount -t vfat -o ro ${LOOP_DEV}p1 ${P1}
 if [ $? -ne 0 ];then
-    echo "æŒ‚è½½å¤±è´¥!"
+    echo "¹ÒÔØÊ§°Ü!"
     losetup -D
     exit 1
 else 
-    echo "æˆåŠŸ"
+    echo "³É¹¦"
 fi        
 
-echo -n "æŒ‚è½½ ${LOOP_DEV}p2 -> ${P2} ... "
+echo -n "¹ÒÔØ ${LOOP_DEV}p2 -> ${P2} ... "
 mount -t btrfs -o ro,compress=zstd ${LOOP_DEV}p2 ${P2}
 if [ $? -ne 0 ];then
-    echo "æŒ‚è½½å¤±è´¥!"
+    echo "¹ÒÔØÊ§°Ü!"
     umount -f ${P1}
     losetup -D
     exit 1
 else
-    echo "æˆåŠŸ"
+    echo "³É¹¦"
 fi        
 
-# æ£€æŸ¥æ–°æ—§ç‰ˆæœ¬
+# ¼ì²éĞÂ¾É°æ±¾
 NEW_SOC=""
 NEW_BOARD=""
 if [ -f ${P2}/etc/flippy-openwrt-release ];then
@@ -204,7 +204,7 @@ if [ -f ${P2}/etc/flippy-openwrt-release ];then
 fi
 
 NEW_KV=$(ls ${P2}/lib/modules/)
-# åˆ¤æ–­å†…æ ¸ç‰ˆæœ¬æ˜¯å¦ >= 5.10
+# ÅĞ¶ÏÄÚºË°æ±¾ÊÇ·ñ >= 5.10
 NK_VER=$(echo "$NEW_KV" | cut -d '.' -f1)
 NK_MAJ=$(echo "$NEW_KV" | cut -d '.' -f2)
 
@@ -222,7 +222,7 @@ fi
 
 if [ "${CUR_SOC}" != "" ];then
     if [ "${CUR_SOC}" != "${NEW_SOC}" ];then
-        echo "é‡‡ç”¨çš„é•œåƒæ–‡ä»¶ä¸å½“å‰ç¯å¢ƒçš„ SOC ä¸åŒ¹é…, è¯·æ£€æŸ¥ï¼"
+        echo "²ÉÓÃµÄ¾µÏñÎÄ¼şÓëµ±Ç°»·¾³µÄ SOC ²»Æ¥Åä, Çë¼ì²é£¡"
         umount -f ${P1}
         umount -f ${P2}
         losetup -D
@@ -230,7 +230,7 @@ if [ "${CUR_SOC}" != "" ];then
     else
         if [ "${CUR_BOARD}" != "" ];then
             if [ "${CUR_BOARD}" != "${NEW_BOARD}" ];then
-                echo "é‡‡ç”¨çš„é•œåƒæ–‡ä»¶ä¸å½“å‰ç¯å¢ƒçš„ BOARD ä¸åŒ¹é…, è¯·æ£€æŸ¥ï¼"
+                echo "²ÉÓÃµÄ¾µÏñÎÄ¼şÓëµ±Ç°»·¾³µÄ BOARD ²»Æ¥Åä, Çë¼ì²é£¡"
                 umount -f ${P1}
                 umount -f ${P2}
                 losetup -D
@@ -240,10 +240,10 @@ if [ "${CUR_SOC}" != "" ];then
     fi
 fi
 
-# åˆ¤æ–­è¦åˆ·çš„ç‰ˆæœ¬
+# ÅĞ¶ÏÒªË¢µÄ°æ±¾
 echo $NEW_KV | grep -E 'flippy-[0-9]{1,3}\+[o]{0,1}' > /dev/null
 if [ $? -ne 0 ];then
-    echo "ç›®æ ‡å›ºä»¶çš„å†…æ ¸ç‰ˆæœ¬æ ¼å¼æ— æ³•è¯†åˆ«ï¼"
+    echo "Ä¿±ê¹Ì¼şµÄÄÚºË°æ±¾¸ñÊ½ÎŞ·¨Ê¶±ğ£¡"
     umount -f ${P1}
     umount -f ${P2}
     losetup -D
@@ -253,7 +253,7 @@ fi
 NEW_FLIPPY_VER=${NEW_KV##*-}
 NEW_FLIPPY_NUM=${NEW_FLIPPY_VER%+*}
 if [ $NEW_FLIPPY_NUM -ge 54 ];then
-    echo "æœ¬è„šæœ¬ä¸æ”¯æŒå‡çº§åˆ° 54+ æˆ– 54+o ä»¥ä¸Šçš„ç‰ˆæœ¬ï¼Œè¯·æ¢æˆ update-amlogic-openwrt.sh"
+    echo "±¾½Å±¾²»Ö§³ÖÉı¼¶µ½ 54+ »ò 54+o ÒÔÉÏµÄ°æ±¾£¬Çë»»³É update-amlogic-openwrt.sh"
     umount -f ${P1}
     umount -f ${P2}
     losetup -D
@@ -273,17 +273,17 @@ if [ $CUR_K510 -ne $NEW_K510 ];then
 fi
 
 BOOT_CHANGED=0
-if [ $UP -eq 1 ];then   # å†…æ ¸å‡çº§
-    # å‡çº§åˆ° >= 5.10 å†…æ ¸ï¼Œä¸èƒ½ ä» emmc å¯åŠ¨ï¼Œ éœ€è¦åš boot è¿ç§»
+if [ $UP -eq 1 ];then   # ÄÚºËÉı¼¶
+    # Éı¼¶µ½ >= 5.10 ÄÚºË£¬²»ÄÜ ´Ó emmc Æô¶¯£¬ ĞèÒª×ö boot Ç¨ÒÆ
     if [ ${CUR_BOOT_FROM_EMMC} -eq 1 ];then
-        # éœ€è¦æ‰¾åˆ°æ–°çš„bootåˆ†åŒº
+        # ĞèÒªÕÒµ½ĞÂµÄboot·ÖÇø
         while : ;do
-	    # æŸ¥æ‰¾å½“å‰å­˜åœ¨çš„ fat32 åˆ†åŒº(æ’é™¤æ­£åœ¨ä½¿ç”¨ä¸­ /boot åˆ†åŒº)
+	    # ²éÕÒµ±Ç°´æÔÚµÄ fat32 ·ÖÇø(ÅÅ³ıÕıÔÚÊ¹ÓÃÖĞ /boot ·ÖÇø)
             NEW_BOOT_MSG=$(lsblk -l -o PATH,NAME,TYPE,FSTYPE,MOUNTPOINT | grep "vfat" | grep -v "loop" | grep -v "${BOOT_PATH}" | head -n 1)                
             if [ "${NEW_BOOT_MSG}" == "" ];then
-                read -p "æœªå‘ç° ${BOOT_PATH} ä»¥å¤–çš„ fat32 æ ¼å¼çš„åˆ†åŒº, è¯·æ’å…¥ä¸€ä¸ªå¸¦æœ‰ fat32 åˆ†åŒºçš„ uç›˜æˆ– tfå¡è®¾å¤‡, æŒ‰å›è½¦é”®ç»§ç»­ï¼Œæˆ–è€…æŒ‰ q é€€å‡º. " pause
+                read -p "Î´·¢ÏÖ ${BOOT_PATH} ÒÔÍâµÄ fat32 ¸ñÊ½µÄ·ÖÇø, Çë²åÈëÒ»¸ö´øÓĞ fat32 ·ÖÇøµÄ uÅÌ»ò tf¿¨Éè±¸, °´»Ø³µ¼ü¼ÌĞø£¬»òÕß°´ q ÍË³ö. " pause
                 case $pause in 
-                    q|Q) echo "å†è§!"
+                    q|Q) echo "ÔÙ¼û!"
                          umount -f $P1
                          umount -f $P2
                          losetup -D
@@ -294,24 +294,24 @@ if [ $UP -eq 1 ];then   # å†…æ ¸å‡çº§
                 NEW_BOOT_PATH=$(echo $NEW_BOOT_MSG | awk '{print $1}')
                 NEW_BOOT_NAME=$(echo $NEW_BOOT_MSG | awk '{print $2}')
                 NEW_BOOT_MOUNTPOINT=$(echo $NEW_BOOT_MSG | awk '{print $5}')
-                read -p "æ–°çš„ boot è®¾å¤‡æ˜¯ $NEW_BOOT_PATH , ä½ ç¡®è®¤å—ï¼Ÿ y/n " pause
+                read -p "ĞÂµÄ boot Éè±¸ÊÇ $NEW_BOOT_PATH , ÄãÈ·ÈÏÂğ£¿ y/n " pause
                 case $pause in 
-                    n|N) echo "æ— æ³•æ‰¾åˆ°åˆé€‚çš„bootè®¾å¤‡ï¼Œ å†è§!"
+                    n|N) echo "ÎŞ·¨ÕÒµ½ºÏÊÊµÄbootÉè±¸£¬ ÔÙ¼û!"
                          umount -f $P1
                          umount -f $P2
                          losetup -D
                          exit 1
                          ;;
-                    y|Y) break  # ç¡®è®¤æ–°è®¾å¤‡
+                    y|Y) break  # È·ÈÏĞÂÉè±¸
                          ;;
                 esac
            fi
        done
 
        while :;do
-           read -p "å°†è¦é‡æ–°æ ¼å¼åŒ– $NEW_BOOT_PATH è®¾å¤‡,é‡Œé¢çš„æ•°æ®å°†ä¼šä¸¢å¤±ï¼Œ ç¡®è®¤å—? y/n " yn
+           read -p "½«ÒªÖØĞÂ¸ñÊ½»¯ $NEW_BOOT_PATH Éè±¸,ÀïÃæµÄÊı¾İ½«»á¶ªÊ§£¬ È·ÈÏÂğ? y/n " yn
            case $yn in 
-               n|N) echo "å†è§!"
+               n|N) echo "ÔÙ¼û!"
                     umount -f $P1
                     umount -f $P2
                     losetup -D
@@ -319,10 +319,10 @@ if [ $UP -eq 1 ];then   # å†…æ ¸å‡çº§
                     ;;
                y|Y) BOOT_LABEL="BOOT"
 		    if [ "${NEW_BOOT_MOUNTPOINT}" != "" ];then
-                        echo "å¸è½½ ${NEW_BOOT_MOUNTPOINT} ..."
+                        echo "Ğ¶ÔØ ${NEW_BOOT_MOUNTPOINT} ..."
                         umount -f ${NEW_BOOT_MOUNTPOINT}
                         if [ $? -ne 0 ];then
-                            echo "æ— æ³•å¸è½½ ${NEW_BOOT_MOUNTPOINT}, å†è§"
+                            echo "ÎŞ·¨Ğ¶ÔØ ${NEW_BOOT_MOUNTPOINT}, ÔÙ¼û"
                             umount -f $P1
                             umount -f $P2
                             losetup -D
@@ -331,34 +331,34 @@ if [ $UP -eq 1 ];then   # å†…æ ¸å‡çº§
                     else
                         mkdir -p /mnt/${NEW_BOOT_NAME}
                     fi
-                    echo "æ ¼å¼åŒ– $NEW_BOOT_PATH ..."
+                    echo "¸ñÊ½»¯ $NEW_BOOT_PATH ..."
                     mkfs.fat -F 32 -n "${BOOT_LABEL}" $NEW_BOOT_PATH
 
-                    echo "æŒ‚è½½ $NEW_BOOT_PATH ->  /mnt/${NEW_BOOT_NAME} ..."
+                    echo "¹ÒÔØ $NEW_BOOT_PATH ->  /mnt/${NEW_BOOT_NAME} ..."
                     mount $NEW_BOOT_PATH  /mnt/${NEW_BOOT_NAME} 
                     if [ $? -ne 0 ];then
-                        echo "æŒ‚è½½ $NEW_BOOT_PATH ->  /mnt/${NEW_BOOT_NAME} å¤±è´¥!"
+                        echo "¹ÒÔØ $NEW_BOOT_PATH ->  /mnt/${NEW_BOOT_NAME} Ê§°Ü!"
                         umount -f $P1
                         umount -f $P2
                         loseup -D
                         exit 1
                     fi
 
-                    echo "å¤åˆ¶ /boot ->  /mnt/${NEW_BOOT_NAME} ..."
+                    echo "¸´ÖÆ /boot ->  /mnt/${NEW_BOOT_NAME} ..."
                     cp -a  /boot/*  /mnt/${NEW_BOOT_NAME}/
 
-                    echo "åˆ‡æ¢ boot ..."
+                    echo "ÇĞ»» boot ..."
                     umount -f /boot && \
                     umount -f /mnt/${NEW_BOOT_NAME} && \
                     mount ${NEW_BOOT_PATH}  /boot
                     if [ $? -ne 0 ];then
-                        echo "åˆ‡æ¢å¤±è´¥!"
+                        echo "ÇĞ»»Ê§°Ü!"
                         umount -f $P1
                         umount -f $P2
                         loseup -D
                         exit 1
                    else
-                        echo "/boot å·²åˆ‡æ¢åˆ°  ${NEW_BOOT_PATH} "
+                        echo "/boot ÒÑÇĞ»»µ½  ${NEW_BOOT_PATH} "
                         BOOT_CHANGED=1
                    fi
                    break 
@@ -366,16 +366,16 @@ if [ $UP -eq 1 ];then   # å†…æ ¸å‡çº§
            esac
        done
    fi
-elif [ $DOWN -eq 1 ];then # å†…æ ¸é™çº§
-   # é™çº§åˆ° < 5.10 å†…æ ¸ï¼Œå¯ä»¥ä» emmc å¯åŠ¨ï¼Œä¹Ÿå¯ä»¥ä» tfå¡ã€uç›˜å¯åŠ¨ï¼Œå¯é€‰æ‹©æ˜¯å¦è¿ç§» boot
+elif [ $DOWN -eq 1 ];then # ÄÚºË½µ¼¶
+   # ½µ¼¶µ½ < 5.10 ÄÚºË£¬¿ÉÒÔ´Ó emmc Æô¶¯£¬Ò²¿ÉÒÔ´Ó tf¿¨¡¢uÅÌÆô¶¯£¬¿ÉÑ¡ÔñÊÇ·ñÇ¨ÒÆ boot
    if [ $CUR_BOOT_FROM_EMMC -eq 0 ];then
        while :;do # do level 1
-           read -p "å†…æ ¸é™çº§åˆ° 5.10 ä»¥ä¸‹, å¯ä»¥ä» EMMC å¯åŠ¨ï¼Œä½ éœ€è¦åˆ‡æ¢ boot åˆ° EMMC å—ï¼Ÿ y/n " yn1
+           read -p "ÄÚºË½µ¼¶µ½ 5.10 ÒÔÏÂ, ¿ÉÒÔ´Ó EMMC Æô¶¯£¬ÄãĞèÒªÇĞ»» boot µ½ EMMC Âğ£¿ y/n " yn1
            case $yn1 in 
                n|N)  break;;
                y|Y)  NEW_BOOT_MSG=$(lsblk -l -o PATH,NAME,TYPE,FSTYPE,MOUNTPOINT | grep "vfat" | grep -v "loop" | grep -v "${BOOT_PATH}" | head -n 1)
                      if [ "${NEW_BOOT_MSG}" == "" ];then
-                         echo "å¾ˆæŠ±æ­‰ï¼Œæœªå‘ç° emmc é‡Œå¯ç”¨çš„ fat32 åˆ†åŒº, å†è§ï¼"
+                         echo "ºÜ±§Ç¸£¬Î´·¢ÏÖ emmc Àï¿ÉÓÃµÄ fat32 ·ÖÇø, ÔÙ¼û£¡"
                          umount -f $P1
                          umount -f $P2
                          losetup -D
@@ -384,11 +384,11 @@ elif [ $DOWN -eq 1 ];then # å†…æ ¸é™çº§
                      NEW_BOOT_PATH=$(echo $NEW_BOOT_MSG | awk '{print $1}')
                      NEW_BOOT_NAME=$(echo $NEW_BOOT_MSG | awk '{print $2}')
                      NEW_BOOT_MOUNTPOINT=$(echo $NEW_BOOT_MSG | awk '{print $5}')
-                     read -p "æ–°çš„ boot è®¾å¤‡æ˜¯ $NEW_BOOT_PATH , ç¡®è®¤å—ï¼Ÿ y/n " pause
+                     read -p "ĞÂµÄ boot Éè±¸ÊÇ $NEW_BOOT_PATH , È·ÈÏÂğ£¿ y/n " pause
 
                      NEW_BOOT_OK=0
                      case $pause in 
-                         n|N) echo "æ— æ³•æ‰¾åˆ°åˆé€‚çš„bootè®¾å¤‡ï¼Œ å†è§!"
+                         n|N) echo "ÎŞ·¨ÕÒµ½ºÏÊÊµÄbootÉè±¸£¬ ÔÙ¼û!"
                               umount -f $P1
                               umount -f $P2
                               losetup -D
@@ -396,9 +396,9 @@ elif [ $DOWN -eq 1 ];then # å†…æ ¸é™çº§
                               ;;
                          y|Y) BOOT_LABEL="EMMC_BOOT" 
                               while :;do # do level 2
-                              read -p "å°†è¦é‡æ–°æ ¼å¼åŒ– ${NEW_BOOT_PATH} è®¾å¤‡,é‡Œé¢çš„æ•°æ®å°†ä¼šä¸¢å¤±ï¼Œ ç¡®è®¤å—? y/n " yn2
+                              read -p "½«ÒªÖØĞÂ¸ñÊ½»¯ ${NEW_BOOT_PATH} Éè±¸,ÀïÃæµÄÊı¾İ½«»á¶ªÊ§£¬ È·ÈÏÂğ? y/n " yn2
                               case $yn2 in 
-                                  n|N) echo "å†è§"
+                                  n|N) echo "ÔÙ¼û"
                                        umount -f $P1
                                        umount -f $P2
                                        losetup -D
@@ -407,44 +407,44 @@ elif [ $DOWN -eq 1 ];then # å†…æ ¸é™çº§
                                   y|Y) if [ "${NEW_BOOT_MOUNTPOINT}" != "" ];then
                                            umount -f ${NEW_BOOT_MOUNTPOINT}
                                            if [ $? -ne 0 ];then
-                                                echo "æ— æ³•å¸è½½ ${NEW_BOOT_MOUNTPOINT}, å†è§"
+                                                echo "ÎŞ·¨Ğ¶ÔØ ${NEW_BOOT_MOUNTPOINT}, ÔÙ¼û"
                                                 umount -f $P1
                                                 umount -f $P2
                                                 losetup -D
                                                 exit 1
                                            fi
                                        fi
-                                       echo "æ ¼å¼åŒ– ${NEW_BOOT_PATH} ..."
+                                       echo "¸ñÊ½»¯ ${NEW_BOOT_PATH} ..."
                                        mkfs.fat -F 32 -n "${BOOT_LABEL}" ${NEW_BOOT_PATH}
 
-                                       echo "æŒ‚è½½ ${NEW_BOOT_PATH} ->  /mnt/${NEW_BOOT_NAME} ..."
+                                       echo "¹ÒÔØ ${NEW_BOOT_PATH} ->  /mnt/${NEW_BOOT_NAME} ..."
                                        mount ${NEW_BOOT_PATH}  /mnt/${NEW_BOOT_NAME} 
                                        if [ $? -ne 0 ];then
-                                           echo "æŒ‚è½½ ${NEW_BOOT_PATH} ->  /mnt/${NEW_BOOT_NAME} å¤±è´¥!"
+                                           echo "¹ÒÔØ ${NEW_BOOT_PATH} ->  /mnt/${NEW_BOOT_NAME} Ê§°Ü!"
                                            umount -f $P1
                                            umount -f $P2
                                            loseup -D
                                            exit 1
                                        fi
 
-                                       echo "å¤åˆ¶ /boot ->  /mnt/${NEW_BOOT_NAME} ..."
+                                       echo "¸´ÖÆ /boot ->  /mnt/${NEW_BOOT_NAME} ..."
                                        cp -a  /boot/*  /mnt/${NEW_BOOT_NAME}/
 
-                                       echo "åˆ‡æ¢ boot ..."
+                                       echo "ÇĞ»» boot ..."
                                        umount -f /boot && \
                                        umount -f /mnt/${NEW_BOOT_NAME}/ && \
                                        mount ${NEW_BOOT_PATH}  /boot
                                        if [ $? -ne 0 ];then
-                                           echo "åˆ‡æ¢å¤±è´¥!"
+                                           echo "ÇĞ»»Ê§°Ü!"
                                            umount -f $P1
                                            umount -f $P2
                                            loseup -D
                                            exit 1
                                        else
-                                           echo "/boot å·²åˆ‡æ¢åˆ° ${NEW_BOOT_PATH}"
+                                           echo "/boot ÒÑÇĞ»»µ½ ${NEW_BOOT_PATH}"
 				           NEW_BOOT_OK=1
                                        fi
-                                       break  # è·³å‡ºç¬¬2å±‚
+                                       break  # Ìø³öµÚ2²ã
                                        ;;
                               esac
                          done # do level 2
@@ -452,40 +452,40 @@ elif [ $DOWN -eq 1 ];then # å†…æ ¸é™çº§
                      esac # case $pause
 		     if [ $NEW_BOOT_OK -eq 1 ];then
                          BOOT_CHANGED=-1
-                         break # è·³å‡ºç¬¬ä¸€å±‚
+                         break # Ìø³öµÚÒ»²ã
                      fi
 		     ;;
            esac # case $yn1
        done # do level 1
-    fi # å½“å‰ä¸åœ¨emmcä¸­å¯åŠ¨
+    fi # µ±Ç°²»ÔÚemmcÖĞÆô¶¯
 fi
 
 #format NEW_ROOT
-echo "å¸è½½ ${NEW_ROOT_MP}"
+echo "Ğ¶ÔØ ${NEW_ROOT_MP}"
 umount -f "${NEW_ROOT_MP}"
 if [ $? -ne 0 ];then
-    echo "å¸è½½å¤±è´¥, è¯·é‡å¯åå†è¯•ä¸€æ¬¡!"
+    echo "Ğ¶ÔØÊ§°Ü, ÇëÖØÆôºóÔÙÊÔÒ»´Î!"
     umount -f ${P1}
     umount -f ${P2}
     losetup -D
     exit 1
 fi
 
-echo "æ ¼å¼åŒ– ${NEW_ROOT_PATH}"
+echo "¸ñÊ½»¯ ${NEW_ROOT_PATH}"
 NEW_ROOT_UUID=$(uuidgen)
 mkfs.btrfs -f -U ${NEW_ROOT_UUID} -L ${NEW_ROOT_LABEL} -m single ${NEW_ROOT_PATH}
 if [ $? -ne 0 ];then
-    echo "æ ¼å¼åŒ– ${NEW_ROOT_PATH} å¤±è´¥!"
+    echo "¸ñÊ½»¯ ${NEW_ROOT_PATH} Ê§°Ü!"
     umount -f ${P1}
     umount -f ${P2}
     losetup -D
     exit 1
 fi
 
-echo "æŒ‚è½½ ${NEW_ROOT_PATH} -> ${NEW_ROOT_MP}"
+echo "¹ÒÔØ ${NEW_ROOT_PATH} -> ${NEW_ROOT_MP}"
 mount -t btrfs -o compress=zstd ${NEW_ROOT_PATH} ${NEW_ROOT_MP}
 if [ $? -ne 0 ];then
-    echo "æŒ‚è½½ ${NEW_ROOT_PATH} -> ${NEW_ROOT_MP} å¤±è´¥!"
+    echo "¹ÒÔØ ${NEW_ROOT_PATH} -> ${NEW_ROOT_MP} Ê§°Ü!"
     umount -f ${P1}
     umount -f ${P2}
     losetup -D
@@ -494,37 +494,37 @@ fi
 
 # begin copy rootfs
 cd ${NEW_ROOT_MP}
-echo "å¼€å§‹å¤åˆ¶æ•°æ®ï¼Œ ä» ${P2} åˆ° ${NEW_ROOT_MP} ..."
+echo "¿ªÊ¼¸´ÖÆÊı¾İ£¬ ´Ó ${P2} µ½ ${NEW_ROOT_MP} ..."
 ENTRYS=$(ls)
 for entry in $ENTRYS;do
     if [ "$entry" == "lost+found" ];then
         continue
     fi
-    echo -n "ç§»é™¤æ—§çš„ $entry ... "
+    echo -n "ÒÆ³ı¾ÉµÄ $entry ... "
     rm -rf $entry 
     if [ $? -eq 0 ];then
-        echo "æˆåŠŸ"
+        echo "³É¹¦"
     else
-        echo "å¤±è´¥"
+        echo "Ê§°Ü"
         exit 1
     fi
 done
 echo
 
-echo -n "åˆ›å»ºæ–‡ä»¶å¤¹ ... "
+echo -n "´´½¨ÎÄ¼ş¼Ğ ... "
 mkdir -p .reserved bin boot dev etc lib opt mnt overlay proc rom root run sbin sys tmp usr www
 ln -sf lib/ lib64
 ln -sf tmp/ var
-echo "å®Œæˆ"
+echo "Íê³É"
 echo
 
 COPY_SRC="root etc bin sbin lib opt usr www"
-echo "å¤åˆ¶æ•°æ® ... "
+echo "¸´ÖÆÊı¾İ ... "
 for src in $COPY_SRC;do
-    echo -n "å¤åˆ¶ $src ... "
+    echo -n "¸´ÖÆ $src ... "
     (cd ${P2} && tar cf - $src) | tar xf -
     sync
-    echo "å®Œæˆ"
+    echo "Íê³É"
 done
 
 SHFS="/mnt/mmcblk2p4"
@@ -542,7 +542,7 @@ fi
 
 rm -f /mnt/${NEW_ROOT_NAME}/root/install-to-emmc.sh
 sync
-echo "å¤åˆ¶å®Œæˆ"
+echo "¸´ÖÆÍê³É"
 echo
 
 BACKUP_LIST=$(${P2}/usr/sbin/flippy -p)
@@ -555,7 +555,7 @@ if [ $BR_FLAG -eq 1 ];then
     fi
     mv ./etc/config/qbittorrent ./etc/config/qbittorrent.orig
 
-    echo -n "å¼€å§‹è¿˜åŸä»æ—§ç³»ç»Ÿå¤‡ä»½çš„é…ç½®æ–‡ä»¶ ... "
+    echo -n "¿ªÊ¼»¹Ô­´Ó¾ÉÏµÍ³±¸·İµÄÅäÖÃÎÄ¼ş ... "
     (
       cd /
       eval tar czf ${NEW_ROOT_MP}/.reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
@@ -573,11 +573,11 @@ if [ $BR_FLAG -eq 1 ];then
     sed -e "s/option wan_mode 'false'/option wan_mode 'true'/" -i ./etc/config/dockerman 2>/dev/null
     sed -e 's/config setting/config verysync/' -i ./etc/config/verysync
     sync
-    echo "å®Œæˆ"
+    echo "Íê³É"
     echo
 fi
 
-echo "ä¿®æ”¹é…ç½®æ–‡ä»¶ ... "
+echo "ĞŞ¸ÄÅäÖÃÎÄ¼ş ... "
 rm -f "./etc/rc.local.orig" "./usr/bin/mk_newpart.sh" "./etc/part_size"
 rm -rf "./opt/docker" && ln -sf "${SHFS}/docker" "./opt/docker"
 cat > ./etc/fstab <<EOF
@@ -612,14 +612,9 @@ config mount
                 
 EOF
 
-# 2021.04.01æ·»åŠ 
-# å¼ºåˆ¶é”å®šfstab,é˜²æ­¢ç”¨æˆ·æ“…è‡ªä¿®æ”¹æŒ‚è½½ç‚¹
+# 2021.04.01Ìí¼Ó
+# Ç¿ÖÆËø¶¨fstab,·ÀÖ¹ÓÃ»§ÉÃ×ÔĞŞ¸Ä¹ÒÔØµã
 chattr +ia ./etc/config/fstab
-
-rm -f ./etc/bench.log
-cat >> ./etc/crontabs/root << EOF
-37 5 * * * /etc/coremark.sh
-EOF
 
 sed -e 's/ttyAMA0/ttyAML0/' -i ./etc/inittab
 sed -e 's/ttyS0/tty0/' -i ./etc/inittab
@@ -637,7 +632,7 @@ if [ $BR_FLAG -eq 1 ];then
         sed -e 's/\/bin\/ash/\/bin\/bash/' -i ./etc/passwd
     fi
     sync
-    echo "å®Œæˆ"
+    echo "Íê³É"
     echo
 fi
 eval tar czf .reserved/openwrt_config.tar.gz "${BACKUP_LIST}" 2>/dev/null
@@ -667,14 +662,14 @@ chmod 755 ./etc/rc.local*
 
 cd ${WORK_DIR}
  
-echo "å¼€å§‹å¤åˆ¶æ•°æ®ï¼Œ ä» ${P1} åˆ° /boot ..."
+echo "¿ªÊ¼¸´ÖÆÊı¾İ£¬ ´Ó ${P1} µ½ /boot ..."
 cd /boot
-echo -n "åˆ é™¤æ—§çš„ boot æ–‡ä»¶ ..."
+echo -n "É¾³ı¾ÉµÄ boot ÎÄ¼ş ..."
 [ -f /tmp/uEnv.txt ] || cp uEnv.txt /tmp/uEnv.txt
 
 rm -rf *
-echo "å®Œæˆ"
-echo -n "å¤åˆ¶æ–°çš„ boot æ–‡ä»¶ ... " 
+echo "Íê³É"
+echo -n "¸´ÖÆĞÂµÄ boot ÎÄ¼ş ... " 
 (cd ${P1} && tar cf - . ) | tar mxf -
 
 if [ "$BOOT_LABEL" == "BOOT" ];then
@@ -688,10 +683,10 @@ elif [ "$BOOT_LABEL" == "EMMC_BOOT" ];then
 fi
 
 sync
-echo "å®Œæˆ"
+echo "Íê³É"
 echo
 
-echo -n "æ›´æ–° boot å‚æ•° ... "
+echo -n "¸üĞÂ boot ²ÎÊı ... "
 if [ -f /tmp/uEnv.txt ];then
     lines=$(wc -l < /tmp/uEnv.txt)
     lines=$(( lines - 1 ))
@@ -714,11 +709,11 @@ else
         echo "-----------------------------------------------------------------------------"
 	(cd ${P2}/dtb/amlogic && ls *.dtb)
         echo "-----------------------------------------------------------------------------"
-        read -p "è¯·æ‰‹åŠ¨è¾“å…¥ dtb æ–‡ä»¶å: " CUR_FDTFILE
+        read -p "ÇëÊÖ¶¯ÊäÈë dtb ÎÄ¼şÃû: " CUR_FDTFILE
 	if [ -f "${P2}/dtb/amlogic/${CUR_FDTFILE}" ];then
             FDT_OK=1
         else
-            echo "è¯¥ dtb æ–‡ä»¶ä¸å­˜åœ¨ï¼è¯·é‡æ–°è¾“å…¥!"
+            echo "¸Ã dtb ÎÄ¼ş²»´æÔÚ£¡ÇëÖØĞÂÊäÈë!"
         fi
     done
     cat > uEnv.txt <<EOF
@@ -732,7 +727,7 @@ EOF
 fi
 
 sync
-echo "å®Œæˆ"
+echo "Íê³É"
 echo
 
 cd $WORK_DIR
@@ -743,11 +738,11 @@ rmdir ${P1} ${P2}
 echo
 echo "----------------------------------------------------------------------"
 if [ $BOOT_CHANGED -gt 0 ];then
-    echo "å‡çº§å·²å®Œæˆ, è¯·ä¸è¦ç§»é™¤å¯åŠ¨ç”¨çš„ TFå¡ æˆ– Uç›˜ï¼Œ ç„¶åè¾“å…¥ reboot å‘½ä»¤é‡å¯ç³»ç»Ÿ!"
+    echo "Éı¼¶ÒÑÍê³É, Çë²»ÒªÒÆ³ıÆô¶¯ÓÃµÄ TF¿¨ »ò UÅÌ£¬ È»ºóÊäÈë reboot ÃüÁîÖØÆôÏµÍ³!"
 elif [ $BOOT_CHANGED -lt 0 ];then
-    echo "å‡çº§å·²å®Œæˆ, è¯·è¾“å…¥ poweroff å‘½ä»¤å…³é—­ç”µæº, ç„¶åç§»é™¤åŸæœ‰çš„ TFå¡ æˆ– Uç›˜ï¼Œ å†å¯åŠ¨ç³»ç»Ÿ!"
+    echo "Éı¼¶ÒÑÍê³É, ÇëÊäÈë poweroff ÃüÁî¹Ø±ÕµçÔ´, È»ºóÒÆ³ıÔ­ÓĞµÄ TF¿¨ »ò UÅÌ£¬ ÔÙÆô¶¯ÏµÍ³!"
 else
-    echo "å‡çº§å·²å®Œæˆ, è¯·è¾“å…¥ reboot å‘½ä»¤é‡å¯ç³»ç»Ÿ!"
+    echo "Éı¼¶ÒÑÍê³É, ÇëÊäÈë reboot ÃüÁîÖØÆôÏµÍ³!"
 fi
 echo "----------------------------------------------------------------------"
 
